@@ -34,7 +34,7 @@ class Empresa extends Model
 
     public function users()
     {
-        return $this->hasMany(UserAdmin::class, 'empresa_id');
+        return $this->hasMany(UserAdmin::class, 'empresa_id')->where('admin_cliente', 1);
     }
 
     public function plano()

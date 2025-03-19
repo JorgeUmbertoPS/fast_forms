@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\UserResource\RelationManagers;
 
 use Filament\Forms;
+use App\Models\Role;
 use Filament\Tables;
 use App\Models\Empresa;
 use Filament\Forms\Form;
@@ -10,7 +11,9 @@ use Filament\Tables\Table;
 use App\Models\UserEmpresa;
 use App\Models\Pba\EmpresaTipo;
 use App\Models\Pba\EmpresaUsuario;
+use Illuminate\Support\Facades\DB;
 use Filament\Tables\Actions\Action;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
@@ -27,21 +30,8 @@ class UsersEmpresasRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Select::make('empresa_id')
-                    ->label('Empresa')
-                    ->options(
-                        Empresa::all()->pluck('nome', 'id')
-                    )
-                    ->required(),
-
-                Select::make('role')
-                    ->label('Perfil')
-                    ->options([
-                        'admin' => 'Administrador',
-                        'user' => 'Usuário',
-                    ])
-                    ->required(),
-
+                Hidden::make('empresa_id'),
+                //Hidden::make('admin_cliente'),
                     TextInput::make('name')
                         ->autofocus()
                         ->required(),    
@@ -50,6 +40,7 @@ class UsersEmpresasRelationManager extends RelationManager
 
                 TextInput::make('email')
                     ->label('Email')
+                    ->email()
                     ->required(),
             ]);
     }
@@ -62,7 +53,6 @@ class UsersEmpresasRelationManager extends RelationManager
             ->columns([
                 Tables\Columns\TextColumn::make('name')->label('Usuário'),
                 Tables\Columns\TextColumn::make('email')->label('Email'),
-                Tables\Columns\TextColumn::make('role')->label('Perfil'),
             ])
             ->filters([
                 //
@@ -103,10 +93,25 @@ class UsersEmpresasRelationManager extends RelationManager
     {
         parent::configureCreateAction($action);
         $action->mutateFormDataUsing(function ($data) {
+            $model = $this->getOwnerRecord();
+            $data['empresa_id'] = $model->id;
             $data['password'] = bcrypt($data['password']);  
-     
+
+            $data['admin_cliente'] = 1;
             return $data;
         });
 
     }
+
+    protected function configureEditAction(Tables\Actions\EditAction $action): void
+    {
+        parent::configureEditAction($action);
+        $action->mutateFormDataUsing(function ($data) {
+            unset($data['password']);
+            $data['admin_cliente'] = 1;
+           // dd($data);
+            return $data;
+        });
+    }
+
 }

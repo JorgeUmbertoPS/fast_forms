@@ -40,7 +40,11 @@ class UserAdmin extends Authenticatable implements FilamentUser
         'name',
         'email',
         'password',
-
+        'ativo',
+        'empresa_id',
+        'admin_cliente',
+        'admin_empresa',
+        
     ];
 
     protected $table = 'users';
