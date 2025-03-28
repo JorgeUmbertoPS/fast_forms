@@ -34,7 +34,8 @@ class Questionario extends Model
         'data_termino',
         'status',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'modelo_relatorio_id'
 
     ];
 
@@ -145,7 +146,7 @@ class Questionario extends Model
                     $qst_pergunta->user_id          = auth()->user()->id;
                     $qst_pergunta->ordem            = $pergunta->ordem;
                     $qst_pergunta->questionario_id  = $id;
-                    $qst_pergunta->resposta_valor_tipo    = $pergunta->resposta_valor_tipo;
+                    $qst_pergunta->id_mascara       = $pergunta->id_mascara;
                     $qst_pergunta->save();
                 }
             }
@@ -165,30 +166,30 @@ class Questionario extends Model
     }
 
 
-    public static function DownloadPdf($id){
-
-        // Recuperar os registros do banco dados
-
-
-        $dados_quesionario = Questionario::where('id', $id)->first();
-        $blocos_perguntas = QuestionarioPerguntaBloco::where('questionario_id', $id)->with('perguntas_questionario')->get();
-        $empresa = Empresa::where('id', $dados_quesionario->empresa_id)->first();
+    public static function DownloadPdf($id)
+    {
+        // Recupera os dados do questionário
+        $dados_quesionario = Questionario::find($id);
+        $blocos_perguntas = QuestionarioPerguntaBloco::where('questionario_id', $id)
+            ->with('perguntas_questionario')
+            ->get(); 
+        $empresa = Empresa::find($dados_quesionario->empresa_id);
 
         $questionario = [
             'nome' => $dados_quesionario->nome,
+            'relatorio' => $dados_quesionario->relatorio->nome,
             'blocos' => $blocos_perguntas,
             'empresa' => $empresa,
         ];
 
+        // Gera o PDF com a view e os dados passados
         $pdf = PDF::loadView('questionarios.gerar-pdf', [
             'questionario' => $questionario,
         ])->setPaper('A4', 'portrait');
-    
-        $file = md5(now()). '.pdf';
 
-        return $pdf;
-        
-    }    
+        return $pdf;  // Retorna o objeto PDF
+    }
+    
 
     public static function FinalizarQuestionario($id){
 
@@ -207,5 +208,9 @@ class Questionario extends Model
 
     }
 
+    // relatorio
+    public function relatorio():hasOne{
+        return $this->hasOne(ModeloRelatorio::class, 'id', 'modelo_relatorio_id');
+    }
 
 }

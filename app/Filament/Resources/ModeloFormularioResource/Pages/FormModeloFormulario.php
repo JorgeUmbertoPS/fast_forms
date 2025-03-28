@@ -25,6 +25,7 @@ use Filament\Forms\Components\Select;
 use App\Models\ModeloRespostaPontuacao;
 use Filament\Forms\Components\Repeater;
 use App\Filament\Resources\ModeloFormularioResource\Pages;
+use App\Models\ModeloMascara;
 
 class FormModeloFormulario
 {
@@ -129,16 +130,13 @@ class FormModeloFormulario
                                                 ModeloRespostaTipo::all()->pluck('nome', 'id')
                                             ),
 
-                                            Select::make('resposta_valor_tipo')
+                                            Select::make('id_mascara')
                                             ->label('Tipo de Valor')
                                             ->reactive()
                                             ->required()
-                                            ->options([
-                                                'text' => 'Texto',
-                                                'number' => 'Número',
-                                                'date' => 'Data',
-                                                'time' => 'Hora'
-                                            ])->visible(
+                                            ->options(
+                                                ModeloMascara::all()->pluck('nome', 'id')
+                                                )->visible(
                                                 function (Get $get) {
                                                     return $get('resposta_tipo_id') == 3;
                                                 }
@@ -189,6 +187,7 @@ class FormModeloFormulario
                                                                 'hand-thumb-down' => 'Resposta Negativa',
                                                                 'hand-thumb-up' => 'Resposta Positiva',
                                                                 'no-symbol' => 'Resposta Neutra',
+                                                                'check-circle' => 'Somente Check',
                                                             ])                                                                
                                                             
                                                         ])

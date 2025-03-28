@@ -29,6 +29,7 @@ use App\Filament\Resources\ChkFormularioResource\Pages\EditFormulario;
 use App\Filament\Resources\ChkFormularioResource\Pages\ListFormularios;
 use App\Filament\Resources\ChkFormularioResource\Pages\CreateFormulario;
 use App\Models\FormularioPergunta;
+use App\Models\ModeloMascara;
 
 class FormularioResource extends Resource
 {
@@ -129,16 +130,13 @@ class FormularioResource extends Resource
                                             ModeloRespostaTipo::all()->pluck('nome', 'id')
                                         ), 
 
-                                        Select::make('resposta_valor_tipo')
+                                        Select::make('id_mascara')
                                         ->label('Tipo de Valor')
                                         ->reactive()
                                         ->required()
-                                        ->options([
-                                            'text' => 'Texto',
-                                            'number' => 'Número',
-                                            'date' => 'Data',
-                                            'time' => 'Hora'
-                                        ])->visible(
+                                        ->options(
+                                            ModeloMascara::all()->pluck('nome', 'id')
+                                        )->visible(
                                             function (Get $get) {
                                                 return $get('resposta_tipo_id') == 3;
                                             }
@@ -188,12 +186,15 @@ class FormularioResource extends Resource
                                                             ->label('Label da Resposta: ')
                                                             ->maxLength(100)
                                                             ->live(),
-                                                            Forms\Components\TextInput::make('empresa_id')
-                                                            ->default(
-                                                                function(){
-                                                                    return auth()->user()->empresa_id;
-                                                                }
-                                                            ),
+                                                        Forms\Components\Select::make('icon')
+                                                        ->label('Ícone')
+                                                        ->required()
+                                                        ->options([
+                                                            'hand-thumb-down' => 'Resposta Negativa',
+                                                            'hand-thumb-up' => 'Resposta Positiva',
+                                                            'no-symbol' => 'Resposta Neutra',
+                                                            'check-circle' => 'Somente Check',
+                                                        ])    ,
                                                          
                                                     ])
                                                     ->addActionLabel('Adicionar Resposta')

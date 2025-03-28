@@ -118,7 +118,7 @@ class Formulario extends Model
                     $qst_pergunta->user_id                  = Auth::user()->id;
                     $qst_pergunta->ordem                    = $pergunta->ordem;
                     $qst_pergunta->questionario_id          = $questionario->id;
-                    $qst_pergunta->resposta_valor_tipo      = $pergunta->resposta_valor_tipo;
+                    $qst_pergunta->id_mascara               = $pergunta->id_mascara;
                     $qst_pergunta->created_at               = Date('Y-m-d H:i:s');
                     $qst_pergunta->updated_at               = Date('Y-m-d H:i:s');
                     $qst_pergunta->pontuacao_id             = $pergunta->pontuacao_id;

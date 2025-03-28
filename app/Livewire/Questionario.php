@@ -57,6 +57,7 @@ class Questionario extends Component
         $resposta_salva = QuestionarioResposta::where('id', $resposta)->where('pergunta_id', $pergunta_id)->first();
         $pergunta = QuestionarioPergunta::where('id', $pergunta_id)->first();
         $pergunta->resposta = $resposta_salva->nome;
+        //dd($resposta_salva->nome);
         $pergunta->save();
 
     }

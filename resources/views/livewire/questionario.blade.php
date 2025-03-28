@@ -25,14 +25,18 @@
               </x-slot>
               <div class="grid grid-cols-3 gap-3 m-1 "> 
                   @foreach ($blocos->perguntas_questionario as $pergunta)           
-                    
+                        
                         @if($pergunta->resposta_tipo_id == 3)
                                
                                   <label class="text-lg font-bold"> {{ $pergunta->pergunta_nome }} </label>
                                   
                                     <!-- Cria um campo de texto vinculado à pergunta, e o valor será a resposta -->
                                     <x-filament::input.wrapper>
-                                    <x-filament::input type="{{ $pergunta->resposta_valor_tipo }}" require wire:model="respostas.{{$pergunta->id}}" value="{{$pergunta->resposta}}" placeholder="Digite sua resposta" />
+                                    <x-filament::input 
+                                    type="{{ $pergunta->mascara->mascara }}" 
+                                    require wire:model="respostas.{{$pergunta->id}}" 
+                                    value="{{$pergunta->resposta}}" 
+                                    placeholder="Digite sua resposta no formato {{$pergunta->mascara->mascara }}" />
                                     </x-filament::input.wrapper>
                                     
                                     <!-- Exibe a mensagem de erro se houver um problema com este campo -->
@@ -53,21 +57,24 @@
                                         <label class="inline-flex items-center" style="margin-left: 20px;">
 
                                             @if($resposta->nome == $pergunta->resposta)
+                                                
                                             <x-filament::icon-button
                                                     icon='heroicon-m-{{ $resposta->icon }}'
                                                     wire:click="saveRadio({{ $pergunta->id }},{{ $resposta->id }})"
-                                                    label="{{ $pergunta->nome }}"
-                                                    color="info"
+                                                    label="{{ $resposta->nome }}"
+                                                    class="info"
                                                     size="xl"
                                                 />
+                                                <span>{{ $resposta->nome }}</span>
                                             @else
                                             <x-filament::icon-button
                                                     icon='heroicon-m-{{ $resposta->icon }}'
                                                     wire:click="saveRadio({{ $pergunta->id }},{{ $resposta->id }})"
-                                                    label="{{ $pergunta->nome }}"
+                                                    label="{{ $resposta->nome }}"
                                                     color="gray"
                                                     size="xl"
                                                 />
+                                                <span>{{ $resposta->nome }}</span>
                                             @endif
                                             
                                         </label>

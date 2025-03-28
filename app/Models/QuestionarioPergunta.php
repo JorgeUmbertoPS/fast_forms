@@ -32,7 +32,7 @@ class QuestionarioPergunta extends Model
         'pergunta_tipo',
         'pergunta_formulario_id',
         'form_id',
-        'resposta_valor_tipo',
+        'id_mascara',
         'obriga_justificativa',
         'obriga_midia',
 
@@ -71,5 +71,10 @@ class QuestionarioPergunta extends Model
         }
         else        
             return array('status' => false, 'mensagem' => 'Problema nos dados');
+    }
+
+    // relacionamento com a mascara 
+    public function mascara(){
+        return $this->belongsTo(ModeloMascara::class, 'id_mascara', 'id');
     }
 }

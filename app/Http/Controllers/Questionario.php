@@ -10,7 +10,8 @@ class Questionario extends Controller
     public function report($record)
     {
         $pdf = QuestionarioModel::DownloadPdf($record);
-      
-        return $pdf->stream(); // renders the PDF in the browser
+        //dd($pdf);
+        return $pdf->stream('questionario.pdf');
     }
+
 }

@@ -174,7 +174,7 @@ class ModeloFormulario extends Model
                     $data_pergunta->created_at          = Date('Y-m-d H:i:s');
                     $data_pergunta->updated_at          = Date('Y-m-d H:i:s');
                     $data_pergunta->ordem               = $pergunta->ordem;
-                    $data_pergunta->resposta_valor_tipo = $pergunta->resposta_valor_tipo;                    
+                    $data_pergunta->id_mascara           = $pergunta->id_mascara;                    
                     $data_pergunta->obriga_justificativa = $pergunta->obriga_justificativa;
                     $data_pergunta->obriga_midia         = $pergunta->obriga_midia;
                     $data_pergunta->save();

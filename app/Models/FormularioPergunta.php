@@ -22,7 +22,7 @@ class FormularioPergunta extends Model
         'nome',
         'empresa_id',
         'resposta_tipo_id',
-        'resposta_valor_tipo',
+        'id_mascara',
         'bloco_id',
         'form_id',
         'modelo_pergunta_id',
