@@ -35,7 +35,8 @@ class Questionario extends Model
         'status',
         'created_at',
         'updated_at',
-        'modelo_relatorio_id'
+        'modelo_relatorio_id',
+        'titulo',
 
     ];
 
@@ -176,7 +177,7 @@ class Questionario extends Model
         $empresa = Empresa::find($dados_quesionario->empresa_id);
 
         $questionario = [
-            'nome' => $dados_quesionario->nome,
+            'nome' => $dados_quesionario->titulo,
             'relatorio' => $dados_quesionario->relatorio->nome,
             'blocos' => $blocos_perguntas,
             'empresa' => $empresa,

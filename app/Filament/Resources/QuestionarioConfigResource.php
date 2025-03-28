@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\QuestionarioConfigResource\Pages;
 use App\Filament\Resources\QuestionarioConfigResource\RelationManagers;
 use App\Filament\Resources\QuestionarioConfigResource\RelationManagers\PlanoAcoesRelationManager;
+use App\Models\ModeloRelatorio;
 
 class QuestionarioConfigResource extends Resource
 {
@@ -38,12 +39,22 @@ class QuestionarioConfigResource extends Resource
                     Forms\Components\TextInput::make('nome')
                             ->label('Nome ')
                             ->disabled(),
+                            Forms\Components\TextInput::make('titulo')
+                            ->label('Título do Questionário')
+                            ->required()
+                            ->maxLength(255),
+                            Forms\Components\Select::make('modelo_relatorio_id')
+                            ->label('Modelo de Relatório')
+                            ->options(ModeloRelatorio::all()->pluck('titulo', 'id'))
+                            ->label('Modelo de Relatório')
+                            ->required()
+                            ->searchable(),
                             Forms\Components\Section::make()
                             ->schema([
                                 Forms\Components\Checkbox::make('criar_resumo'),
                                 Forms\Components\Checkbox::make('envia_email_etapas'),
                                 Forms\Components\Checkbox::make('obriga_assinatura'),                                
-                            ])->columns(3),
+                            ])->columns(3)->columnSpan(1),
                             Forms\Components\Group::make()
                             ->schema([
                                 Forms\Components\TextInput::make('avisar_dias_antes')->numeric(),
@@ -52,7 +63,8 @@ class QuestionarioConfigResource extends Resource
                             ])->columns(3)
 
 
-                ])
+                ])->columns(2)
+                ->columns(2)
             ]);
     }
 
