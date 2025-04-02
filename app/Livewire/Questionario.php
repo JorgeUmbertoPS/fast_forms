@@ -30,7 +30,8 @@ class Questionario extends Component
             'respostas.*.string' => 'Este campo deve ser um texto.',
             'respostas.*.max' => 'O campo não pode ter mais que 255 caracteres.',
         ]);*/
-        
+        dd($this->respostas);
+
        foreach ($this->respostas as $key => $resposta) {
             $resposta_salva = QuestionarioPergunta::find($key);
             $resposta_salva->resposta = $resposta;
@@ -49,6 +50,17 @@ class Questionario extends Component
          $this->dispatch('$refresh');
 
     }
+
+    public function saveText($pergunta_id, $resposta)
+    {
+        $pergunta = QuestionarioPergunta::find($pergunta_id);
+        
+        if ($pergunta) {
+            $pergunta->resposta = $resposta;
+            $pergunta->save();
+        }
+    }
+
 
     public function saveRadio($pergunta_id, $resposta)
     {

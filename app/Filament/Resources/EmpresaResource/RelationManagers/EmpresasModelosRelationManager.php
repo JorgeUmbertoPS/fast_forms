@@ -19,6 +19,10 @@ class EmpresasModelosRelationManager extends RelationManager
 {
     protected static string $relationship = 'empresas_modelos';
 
+    protected static ?string $title = 'Modelo de Formulário';
+
+    protected static ?string $icon = 'heroicon-o-document-text';
+
     public function form(Form $form): Form
     {
         return $form
@@ -34,6 +38,8 @@ class EmpresasModelosRelationManager extends RelationManager
     {
         return $table
             ->recordTitleAttribute('Modelos')
+            ->heading('Modelos de Formulários')
+            ->description('Modelos de Formulários disponíveis para a empresa')
             ->columns([
                 Tables\Columns\TextColumn::make('modelo.nome')->label('Modelo'),
                 Tables\Columns\IconColumn::make('status')
@@ -131,4 +137,6 @@ class EmpresasModelosRelationManager extends RelationManager
                 //,
             ]);
     }
+
+    
 }

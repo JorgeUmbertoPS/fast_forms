@@ -15,6 +15,8 @@ use App\Traits\TraitSomenteUsuario;
 use Filament\Tables\Actions\Action;
 use App\Models\ModeloRespostaPontuacao;
 use Filament\Forms\Components\Repeater;
+use Filament\Tables\Columns\IconColumn;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\ModelosFormulariosClientes;
@@ -64,9 +66,9 @@ class ModelosFormulariosClientesResource extends Resource
                 Tables\Columns\TextColumn::make('nome')
                     ->searchable()
                     ->label('Descrição do Formulário'),
-                    Tables\Columns\TextColumn::make('status')
+                    IconColumn::make('status')
                     ->searchable()
-                    ->label('status'),                    
+                    ->label('Status'),                    
                 Tables\Columns\TextColumn::make('created_at')
                 ->dateTime('d/m/Y H:i:m')
                 ->label('Criado em'),
@@ -79,7 +81,24 @@ class ModelosFormulariosClientesResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make()->label('Visualizar'),
+                Action::make('verView')
+                ->label('Visualizar')
+                  
+                ->action(function () {
+                    // Aqui pode incluir lógica ou apenas redirecionar para a view
+                })
+                ->icon('heroicon-m-eye')
+                ->color('info')
+                ->modalWidth('80%')
+                ->modalContent(
+                    function (Model $record) {
+                        $dados = ModeloFormulario::ObterDadosView($record->id);
+                        return view('filament.modelo.formulario',
+                            [
+                                'dados' => $dados,
+                            ]
+                        );
+                }),
 
                 Action::make('liberar')
                     ->label('Pedir Modelo')
@@ -89,7 +108,7 @@ class ModelosFormulariosClientesResource extends Resource
                     ->modalSubmitActionLabel('Sim, desejo utilizar')
                     ->icon('heroicon-m-credit-card')
                     ->color('primary')
-                    ->button()                    
+                                        
                     ->action(
 
                         function(ModeloFormulario $record){
@@ -131,6 +150,7 @@ class ModelosFormulariosClientesResource extends Resource
                     Action::make('aguardar')
                     ->label('Aguardando Liberação')
                     ->color('warning')
+                      
                     ->visible(
                         function(ModeloFormulario $record){
 
@@ -154,7 +174,7 @@ class ModelosFormulariosClientesResource extends Resource
                     ->modalSubmitActionLabel('Sim, desejo liberar')
                     ->icon('heroicon-m-x-mark')
                     ->color('success')
-                    ->button()                    
+                                        
                     ->action(
 
                         function(ModeloFormulario $record){
@@ -193,6 +213,7 @@ class ModelosFormulariosClientesResource extends Resource
                     Action::make('aguardar')
                     ->label('Modelo já utilizado')
                     ->color('primary')
+                      
                     ->visible(
                         function(ModeloFormulario $record){
 
@@ -209,7 +230,7 @@ class ModelosFormulariosClientesResource extends Resource
             ])
             ->bulkActions([
 
-            ]);
+        ]);
     }
 
     public static function getRelations(): array

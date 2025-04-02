@@ -56,45 +56,33 @@ class QuestionarioResource extends Resource
                     ->icon('heroicon-o-sparkles')
                     ->label('Responder')
                     ->color('primary')
-                    ->button()
+                    
                     ->url(
                         function(Questionario $record) {
                             return ('questionario/'. $record->id);
                         }
-                    )
-                    ->visible(fn (Questionario $record): bool => $record->status == 1),
-                    Tables\Actions\Action::make('imprimir')
+                    ),
+                    //->visible(fn (Questionario $record): bool => $record->status == 1),
+                
+                Tables\Actions\Action::make('imprimir')
                     ->icon('heroicon-o-printer')
                     ->label('Imprimir')
                     ->color('gray')
-                    ->button()
+                    
                     ->url(
                         fn (Questionario $record): string => route('questionario.report', ['record' => $record]),
                         shouldOpenInNewTab: true
                     ),
-                    Tables\Actions\Action::make('finalizar')
+
+                Tables\Actions\Action::make('finalizar')
                     ->icon('heroicon-o-hand-thumb-up')
                     ->label('Finalizar')
                     ->color('warning')
-                    ->button()
-                    ->action(
-                        function(Questionario $record) {
-                            $ret = Questionario::FinalizarQuestionario($record->id);
-                            if($ret['return'] == true){
-                                Notification::make()
-                                ->title('Questionário finalizado com sucesso')
-                                ->success()
-                                ->send();
-                            }
-                            else{
-                                Notification::make()
-                                ->title('Erro ao finalizar questionário')
-                                ->danger()
-                                ->send();
-                            }
-                        }
-                    )
-                    ->visible(fn (Questionario $record): bool => $record->status == 1),
+                    
+                    ->url(
+                        fn (Questionario $record): string => route('filament.admin.resources.questionario-finalizas.edit', ['record' => $record]),
+                        shouldOpenInNewTab: false
+                    ), //admin/questionario-finalizas/{record}/edit ....... filament.admin.resources.questionario-finalizas.edit
  
                                      
             ], position: ActionsPosition::BeforeColumns)

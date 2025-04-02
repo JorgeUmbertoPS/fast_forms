@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\UserAdmin;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -34,7 +33,7 @@ class Empresa extends Model
 
     public function users()
     {
-        return $this->hasMany(UserAdmin::class, 'empresa_id')->where('admin_cliente', 1);
+        return $this->hasMany(User::class, 'empresa_id')->where('admin_cliente', 1);
     }
 
     public function plano()
@@ -48,6 +47,17 @@ class Empresa extends Model
 
     public function empresas_modelos(){
         return $this->hasMany(ModeloFormularioEmpresa::class, 'empresa_id');
+    }
+
+    public static function PossuiusuarioAdmin($id){
+        //verifica se usuario admin existe
+        $usuario = User::where('empresa_id', $id)->where('admin_cliente', 1)->first();
+        if($usuario == null){
+            return false;
+        }
+        else{
+            return true;
+        }
     }
 
     /*

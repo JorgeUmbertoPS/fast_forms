@@ -284,7 +284,7 @@ class FormularioResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make()
                 ->label('Alterar')
-                ->button()
+                
                 ->visible(fn($record): bool => $record->status == 1),
                 
 
@@ -298,7 +298,7 @@ class FormularioResource extends Resource
                     ->requiresConfirmation()
                     ->icon('heroicon-m-x-mark')
                     ->color('danger')  
-                    ->button()                  
+                                      
                     ->action(fn (Formulario $record) => $record->desativar($record->id)),               
 
                 Action::make('geraQuestionario')
@@ -306,7 +306,7 @@ class FormularioResource extends Resource
                     ->requiresConfirmation()
                     ->icon('heroicon-m-cog')
                     ->color('warning')      
-                    ->button()     
+                         
                     ->visible(fn($record): bool => $record->status == 1)         
                     ->action(function (Formulario $record){
 
@@ -329,7 +329,7 @@ class FormularioResource extends Resource
                     
                     Action::make('verView')
                     ->label('Visualizar')
-                    ->button()  
+                      
                     ->action(function () {
                         // Aqui pode incluir lógica ou apenas redirecionar para a view
                     })
@@ -344,7 +344,7 @@ class FormularioResource extends Resource
                                     'dados' => $dados,
                                 ]
                             );
-                        }),
+                    }),
                 ])
 
 

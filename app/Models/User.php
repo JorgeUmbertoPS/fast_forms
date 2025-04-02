@@ -24,7 +24,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 #[ObservedBy([UserObserver::class])]
 class User extends Authenticatable implements FilamentUser
 {
-    use HasApiTokens, HasFactory, Notifiable, HasSuperAdmin, HasRoles, SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -40,6 +40,11 @@ class User extends Authenticatable implements FilamentUser
         'admin_cliente',
         'admin_empresa',
     ];
+
+    public function isSuperAdmin(): bool
+    {
+        return $this->hasRole(config('filament-spatie-roles-permissions.super_admin_role_name', 'SuperAdmin'));
+    }
 
     public function canAccessPanel(Panel $panel): bool
     {
@@ -59,7 +64,6 @@ class User extends Authenticatable implements FilamentUser
     protected $hidden = [
         'password',
         'remember_token',
-        'empresa_id'
     ];
 
     /**
@@ -109,7 +113,7 @@ class User extends Authenticatable implements FilamentUser
         
     }
 
-    public function empresa(){
+    public function empresa_has_one(){
         return $this->hasOne(Empresa::class, 'id', 'empresa_id');
     }
 

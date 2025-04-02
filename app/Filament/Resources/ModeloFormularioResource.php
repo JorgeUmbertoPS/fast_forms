@@ -66,7 +66,7 @@ class ModeloFormularioResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make()->label('Alterar')->button()  ,
+                Tables\Actions\EditAction::make()->label('Alterar')  ,
                 
                 Action::make('liberar')
                 ->label(
@@ -83,12 +83,12 @@ class ModeloFormularioResource extends Resource
                         else return 'primary';
                     }
                 )
-                ->button()                    
+                                    
                 ->action(fn (ModeloFormulario $record) => $record->LiberarBloquear($record->id)),  
 
                 Action::make('verView')
                 ->label('Visualizar')
-                ->button()  
+                  
                 ->action(function () {
                     // Aqui pode incluir lógica ou apenas redirecionar para a view
                 })

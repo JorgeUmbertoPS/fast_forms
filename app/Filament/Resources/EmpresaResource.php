@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Empresa;
+use App\Models\Segmento;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\EmpresaPlano;
@@ -12,13 +13,13 @@ use Filament\Resources\Resource;
 use Filament\Forms\Components\Grid;
 use App\Traits\TraitSomenteSuperUser;
 use Filament\Forms\Components\Section;
+use Filament\Tables\Columns\ImageColumn;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\EmpresaResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\EmpresaResource\RelationManagers;
-use App\Filament\Resources\EmpresaResource\RelationManagers\EmpresasModelosRelationManager;
 use App\Filament\Resources\UserResource\RelationManagers\UsersEmpresasRelationManager;
-use App\Models\Segmento;
+use App\Filament\Resources\EmpresaResource\RelationManagers\EmpresasModelosRelationManager;
 
 class EmpresaResource extends Resource
 {
@@ -131,11 +132,14 @@ class EmpresaResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('nome')
                     ->searchable(),
+                    ImageColumn::make('logo')
+                    ->label('Logo')
+                    ->size(50),                    
                 Tables\Columns\TextColumn::make('email'),
-                Tables\Columns\TextColumn::make('users.name'),
                 Tables\Columns\TextColumn::make('plano.name')
                     ->label('Plano'),
-                Tables\Columns\IconColumn::make('status')
+                Tables\Columns\IconColumn::make('status'),
+
             ])
             ->filters([
                 //
@@ -149,12 +153,13 @@ class EmpresaResource extends Resource
                 ]),
         ]);
     }
+    
 
     public static function getRelations(): array
     {
         return [
-            UsersEmpresasRelationManager::class,
             EmpresasModelosRelationManager::class,
+            UsersEmpresasRelationManager::class,
         ];
     }
 

@@ -26,26 +26,24 @@
               <div class="grid grid-cols-3 gap-3 m-1 "> 
                   @foreach ($blocos->perguntas_questionario as $pergunta)           
                         
-                        @if($pergunta->resposta_tipo_id == 3)
-                               
-                                  <label class="text-lg font-bold"> {{ $pergunta->pergunta_nome }} </label>
-                                  
-                                    <!-- Cria um campo de texto vinculado à pergunta, e o valor será a resposta -->
-                                    <x-filament::input.wrapper>
-                                    <x-filament::input 
-                                    type="{{ $pergunta->mascara->mascara }}" 
-                                    require wire:model="respostas.{{$pergunta->id}}" 
-                                    value="{{$pergunta->resposta}}" 
-                                    placeholder="Digite sua resposta no formato {{$pergunta->mascara->mascara }}" />
-                                    </x-filament::input.wrapper>
-                                    
-                                    <!-- Exibe a mensagem de erro se houver um problema com este campo -->
-                                    @error('respostas.'.$pergunta->id)
-                                        <span class="text-red-700 text-sm">{{ $message }}</span>
-                                    @enderror
-                  
+                    @if($pergunta->resposta_tipo_id == 3)
+                        <label class="text-lg font-bold"> {{ $pergunta->pergunta_nome }} </label>
                         
-                        @endif
+                        <x-filament::input.wrapper>
+                            <x-filament::input 
+                                type="{{ $pergunta->mascara->mascara }}" 
+                                required 
+                                wire:model="respostas.{{$pergunta->id}}" 
+                                wire:blur="saveText({{ $pergunta->id }}, $event.target.value)"
+                                value="{{$pergunta->resposta}}" 
+                                placeholder="Digite sua resposta no formato {{$pergunta->mascara->mascara }}" />
+                        </x-filament::input.wrapper>
+
+                        @error('respostas.'.$pergunta->id)
+                            <span class="text-red-700 text-sm">{{ $message }}</span>
+                        @enderror
+                    @endif
+
 
                         @if($pergunta->resposta_tipo_id == 2)
                         <x-filament::fieldset>
@@ -54,48 +52,52 @@
                             </x-slot>
                             
                             @foreach ($pergunta->questionario_respostas as $resposta)
-                                        <label class="inline-flex items-center" style="margin-left: 20px;">
+                                <label class="inline-flex items-center" style="margin-left: 20px;">
 
-                                            @if($resposta->nome == $pergunta->resposta)
-                                                
-                                            <x-filament::icon-button
-                                                    icon='heroicon-m-{{ $resposta->icon }}'
-                                                    wire:click="saveRadio({{ $pergunta->id }},{{ $resposta->id }})"
-                                                    label="{{ $resposta->nome }}"
-                                                    class="info"
-                                                    size="xl"
-                                                />
-                                                <span>{{ $resposta->nome }}</span>
-                                            @else
-                                            <x-filament::icon-button
-                                                    icon='heroicon-m-{{ $resposta->icon }}'
-                                                    wire:click="saveRadio({{ $pergunta->id }},{{ $resposta->id }})"
-                                                    label="{{ $resposta->nome }}"
-                                                    color="gray"
-                                                    size="xl"
-                                                />
-                                                <span>{{ $resposta->nome }}</span>
-                                            @endif
-                                            
-                                        </label>
+                                    @php
+                                        // Define a cor com base na resposta
+                                        $color = 'gray'; // Cor padrão
+                                        if ($resposta->nome === 'OK') {
+                                            $color = 'success';
+                                        } elseif ($resposta->nome === 'NOK') {
+                                            $color = 'danger';
+                                        } elseif ($resposta->nome === 'N/A') {
+                                            $color = 'info';
+                                        }
+                                    @endphp
+
+                                    <x-filament::icon-button
+                                        icon="heroicon-m-{{ $resposta->icon }}"
+                                        wire:click="saveRadio({{ $pergunta->id }}, {{ $resposta->id }})"
+                                        label="{{ $resposta->nome }}"
+                                        color="{{ $resposta->nome == $pergunta->resposta ? $color : 'gray' }}"
+                                        size="xl"
+                                    />
+                                    <span>{{ $resposta->nome }}</span>
+                                </label>
                             @endforeach
+
                         </x-filament::fieldset>
 
                         @endif                                     
                   @endforeach
+
+                  @if($pergunta->obriga_justificativa == 0)
+                    <div class="mt-2">
+                        <x-filament::input.wrapper>
+                            <x-filament::input 
+                                type="text"
+                                wire:model="justificativas.{{$pergunta->id}}"
+                                placeholder="Digite sua justificativa..."
+                            />
+                        </x-filament::input.wrapper>
+                    </div>
+                @endif
               </div>
             </x-filament::section>
      
         @endforeach
 
-        <x-filament::button 
-        style="margin-top: 15px;"
-        type="submit"
-            icon="heroicon-m-circle-stack"
-            icon-position="after"
-        >
-            Salvar
-        </x-filament::button>
     </form>
 
     
