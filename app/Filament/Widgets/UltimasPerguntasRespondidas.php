@@ -24,47 +24,40 @@ class UltimasPerguntasRespondidas extends BaseWidget
 
     public function table(Table $table): Table
     {
-        if(User::SuperAdmin()){
+
+
             return $table
                 ->query(
 
                     Empresa::leftJoin('modelo_formularios_empresas', 'modelo_formularios_empresas.empresa_id', '=', 'empresas.id')
-                    ->leftJoin('formularios', 'formularios.empresa_id', '=', 'empresas.id')
-                    ->leftJoin('questionarios', 'questionarios.empresa_id', '=', 'empresas.id')
+                   // ->leftJoin('formularios', 'formularios.empresa_id', '=', 'empresas.id')
+                    //->leftJoin('questionarios', 'questionarios.empresa_id', '=', 'empresas.id')
                     ->select('empresas.nome', 'empresas.id',
                         DB::raw('(select count(*) from modelo_formularios_empresas where modelo_formularios_empresas.empresa_id = empresas.id) qtd_modelos_utilizados'),
                         DB::raw('(select count(*) from formularios f where f.empresa_id = empresas.id) qtd_formularios_gerados'),
-                        DB::raw('(select count(*) from questionarios q where q.empresa_id = empresas.id) qtd_questionarios_gerados'))
+                        DB::raw('(select count(*) from questionarios q where q.empresa_id = empresas.id) qtd_questionarios_gerados'),
+                        DB::raw('(select count(*) from formularios f where f.empresa_id = empresas.id) qtd_formularios_gerados'),
+                        DB::raw('(select count(*) from formularios f where f.empresa_id = empresas.id) qtd_formularios_aguardando'),
+                        DB::raw('(select count(*) from formularios f where f.empresa_id = empresas.id) qtd_formularios_gerados3'),
+                        DB::raw('(select count(*) from formularios f where f.empresa_id = empresas.id) qtd_formularios_gerados4'),
+                    )
                     ->groupBy('empresas.nome', 'empresas.id'))
                 ->columns([
                     TextColumn::make('nome')->label('Empresa'),
                     TextColumn::make('qtd_modelos_utilizados')->label('Modelos Utilizados'),
                     TextColumn::make('qtd_formularios_gerados')->label('Formulários Gerados'),
-                    TextColumn::make('qtd_questionarios_gerados')->label('Questionários Gerados'),
+                    TextColumn::make('qtd_questionarios_gerados')->label('Formulários Pedidos'),
+                    TextColumn::make('qtd_questionarios_gerados2')->label('Formulários Aguardando'),
+                    TextColumn::make('qtd_questionarios_gerados3')->label('Formulários Rejeitados'),
+                    TextColumn::make('qtd_formularios_gerados4')->label('Questionários Gerados'),
                     
                 ]);
-        }
-        else
-        {
-            return $table
-                ->query(
 
-                    Empresa::leftJoin('modelo_formularios_empresas', 'modelo_formularios_empresas.empresa_id', '=', 'empresas.id')
-                    ->leftJoin('formularios', 'formularios.empresa_id', '=', 'empresas.id')
-                    ->leftJoin('questionarios', 'questionarios.empresa_id', '=', 'empresas.id')
-                    ->where('modelo_formularios_empresas.empresa_id', auth()->user()->empresa_id)
-                    ->select('empresas.nome', 'empresas.id',
-                        DB::raw('(select count(*) from modelo_formularios_empresas where modelo_formularios_empresas.empresa_id = empresas.id) qtd_modelos_utilizados'),
-                        DB::raw('(select count(*) from formularios f where f.empresa_id = empresas.id) qtd_formularios_gerados'),
-                        DB::raw('(select count(*) from questionarios q where q.empresa_id = empresas.id) qtd_questionarios_gerados'))
-                    ->groupBy('empresas.nome', 'empresas.id'))
-                ->columns([
-                    TextColumn::make('nome')->label('Empresa'),
-                    TextColumn::make('qtd_modelos_utilizados')->label('Modelos Utilizados'),
-                    TextColumn::make('qtd_formularios_gerados')->label('Formulários Gerados'),
-                    TextColumn::make('qtd_questionarios_gerados')->label('Questionários Gerados'),
-                    
-                ]);
-        }
+     
+    }
+
+    public static function canView(): bool
+    {
+        return User::SuperAdmin();
     }
 }

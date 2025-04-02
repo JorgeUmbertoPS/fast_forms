@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\EmpresaResource\RelationManagers;
 
+use App\Models\ModeloFormulario;
 use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Form;
@@ -77,8 +78,7 @@ class EmpresasModelosRelationManager extends RelationManager
                             ->send();
                         }
                     }
-                )->visible(fn ($record) => $record->status == 1)
-                ,
+                )->visible(fn ($record) => $record->status == 1),
                 
                 // action liberar
                 Action::make('cancelar')
@@ -115,12 +115,17 @@ class EmpresasModelosRelationManager extends RelationManager
                 Action::make('liberado')
                 ->label('Modelo já liberado')
                 ->color('primary')                  
-                ->visible(fn ($record) => $record->status == 3),
+                ->visible(fn ($record) => $record->status == ModeloFormulario::STATUS_FOI_LIBERADO),
+
+                Action::make('liberado')
+                ->label('Modelo já em uso')
+                ->color('info')                  
+                ->visible(fn ($record) => $record->status == ModeloFormulario::STATUS_FOI_UTILIZADO),                
                 
                 Action::make('cancelado')
                 ->label('Modelo não liberado')
                 ->color('danger')                  
-                ->visible(fn ($record) => $record->status == 4),                
+                ->visible(fn ($record) => $record->status == ModeloFormulario::STATUS_NAO_FOI_LIBERADO),                
             ])
             ->bulkActions([
                 //,

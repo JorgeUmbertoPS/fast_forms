@@ -22,7 +22,7 @@ return new class extends Migration
             $table->integer('avisar_dias_antes')->default(0);
             $table->date('data_inicio')->nullable();
             $table->date('data_termino')->nullable();
-            $table->string('status', 1)->default('A');
+            $table->integer('status')->default(1);
             $table->text('resumo')->nullable();
             $table->string('arquivo_pdf')->nullable();
             $table->timestamps();

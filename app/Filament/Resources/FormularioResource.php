@@ -9,9 +9,12 @@ use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Forms\Form;
 use App\Models\Formulario;
-
 use Filament\Tables\Table;
+use App\Models\ModeloMascara;
+
+use App\Models\ModeloFormulario;
 use Filament\Resources\Resource;
+use App\Models\FormularioPergunta;
 use App\Models\ModeloRespostaTipo;
 use Illuminate\Support\HtmlString;
 use App\Traits\TraitSomenteUsuario;
@@ -23,13 +26,12 @@ use App\Models\ModeloRespostaPontuacao;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Tables\Columns\IconColumn;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Notifications\Notification;
 use Filament\Tables\Actions\ActionGroup;
 use App\Filament\Resources\ChkFormularioResource\Pages\EditFormulario;
 use App\Filament\Resources\ChkFormularioResource\Pages\ListFormularios;
 use App\Filament\Resources\ChkFormularioResource\Pages\CreateFormulario;
-use App\Models\FormularioPergunta;
-use App\Models\ModeloMascara;
 
 class FormularioResource extends Resource
 {
@@ -269,11 +271,9 @@ class FormularioResource extends Resource
                 Tables\Columns\TextColumn::make('nome')
                     ->sortable(),                 
                 Tables\Columns\TextColumn::make('data_inicio')
-                    ->date('d/m/Y')
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->date('d/m/Y'),
                 Tables\Columns\TextColumn::make('data_termino')
-                    ->date('d/m/Y')
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->date('d/m/Y'),
                 IconColumn::make('status')
                     ->boolean()
 
@@ -284,49 +284,72 @@ class FormularioResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make()
                 ->label('Alterar')
+                ->button()
                 ->visible(fn($record): bool => $record->status == 1),
-                ActionGroup::make([
+                
 
-                    Action::make('desativar')
-                        ->label(
-                            function(Formulario $record){
-                                if($record->status == 1) return 'Desativar';
-                                else return 'Ativar';
-                            }
-                        )
-                        ->requiresConfirmation()
-                        ->icon('heroicon-m-x-mark')
-                        ->color('danger')                    
-                        ->action(fn (Formulario $record) => $record->desativar($record->id)),               
+                Action::make('desativar')
+                    ->label(
+                        function(Formulario $record){
+                            if($record->status == 1) return 'Desativar';
+                            else return 'Ativar';
+                        }
+                    )
+                    ->requiresConfirmation()
+                    ->icon('heroicon-m-x-mark')
+                    ->color('danger')  
+                    ->button()                  
+                    ->action(fn (Formulario $record) => $record->desativar($record->id)),               
 
-                    Action::make('geraQuestionario')
-                        ->label('Gerar Questionário')
-                        ->requiresConfirmation()
-                        ->icon('heroicon-m-cog')
-                        ->color('warning')           
-                        ->visible(fn($record): bool => $record->status == 1)         
-                        ->action(function (Formulario $record){
+                Action::make('geraQuestionario')
+                    ->label('Gerar Questionário')
+                    ->requiresConfirmation()
+                    ->icon('heroicon-m-cog')
+                    ->color('warning')      
+                    ->button()     
+                    ->visible(fn($record): bool => $record->status == 1)         
+                    ->action(function (Formulario $record){
 
-                            $resp = Formulario::GerarQuestionario($record);
-                            if($resp['status']== true){
-                                Notification::make()
-                                ->success()
-                                ->title('Gerado com Sucesso')
-                                ->body('O questionário foi gerado para ser Respondido')
-                                ->send();
-                            }
-                            else{
-                                Notification::make()
-                                ->warning()
-                                ->title('Questionário não Gerado')
-                                ->body('Motivo: ' . $resp['mensagem'])
-                                ->send();
-                            }
-                        })                    
-                    ])->iconButton()
-                    ->label('Ações'),
-
+                        $resp = Formulario::GerarQuestionario($record);
+                        if($resp['status']== true){
+                            Notification::make()
+                            ->success()
+                            ->title('Gerado com Sucesso')
+                            ->body('O questionário foi gerado para ser Respondido')
+                            ->send();
+                        }
+                        else{
+                            Notification::make()
+                            ->warning()
+                            ->title('Questionário não Gerado')
+                            ->body('Motivo: ' . $resp['mensagem'])
+                            ->send();
+                        }
+                    }),   
+                    
+                    Action::make('verView')
+                    ->label('Visualizar')
+                    ->button()  
+                    ->action(function () {
+                        // Aqui pode incluir lógica ou apenas redirecionar para a view
+                    })
+                    ->icon('heroicon-m-eye')
+                    ->color('info')
+                    ->modalWidth('80%')
+                    ->modalContent(
+                        function (Model $record) {
+                            $dados = Formulario::ObterDadosView($record->id);
+                            return view('filament.modelo.formulario',
+                                [
+                                    'dados' => $dados,
+                                ]
+                            );
+                        }),
                 ])
+
+
+
+                
 
             ->bulkActions([
 

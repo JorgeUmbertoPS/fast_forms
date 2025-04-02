@@ -3,14 +3,14 @@
 namespace App\Filament\Resources;
 
 use Closure;
-
 use Form\Set;
+
 use Filament\Forms;
 use App\Models\User;
 use Filament\Tables;
 use Filament\Forms\Get;
-
 use Filament\Forms\Form;
+
 use App\Models\Formulario;
 use Filament\Tables\Table;
 use App\Models\ModeloFormulario;
@@ -21,6 +21,7 @@ use App\Traits\TraitSomenteSuperUser;
 use Illuminate\Database\Query\Builder;
 use App\Models\ModeloRespostaPontuacao;
 use Filament\Forms\Components\Repeater;
+use Illuminate\Database\Eloquent\Model;
 use App\Filament\Resources\ModeloFormularioResource\Pages;
 use App\Filament\Resources\ModeloFormularioResource\Pages\FormModeloFormulario;
 
@@ -65,7 +66,8 @@ class ModeloFormularioResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make()->label('Alterar'),
+                Tables\Actions\EditAction::make()->label('Alterar')->button()  ,
+                
                 Action::make('liberar')
                 ->label(
                     function(ModeloFormulario $record){
@@ -84,6 +86,25 @@ class ModeloFormularioResource extends Resource
                 ->button()                    
                 ->action(fn (ModeloFormulario $record) => $record->LiberarBloquear($record->id)),  
 
+                Action::make('verView')
+                ->label('Visualizar')
+                ->button()  
+                ->action(function () {
+                    // Aqui pode incluir lógica ou apenas redirecionar para a view
+                })
+                ->icon('heroicon-m-eye')
+                ->color('info')
+                ->modalWidth('80%')
+                ->modalContent(
+                    function (Model $record) {
+                        $dados = ModeloFormulario::ObterDadosView($record->id);
+                        return view('filament.modelo.modelo',
+                            [
+                                'dados' => $dados,
+                            ]
+                        );
+                    }),
+
             ])
             ->bulkActions([
 
@@ -96,6 +117,7 @@ class ModeloFormularioResource extends Resource
             'index' => Pages\ListModeloFormularios::route('/'),
             'create' => Pages\CreateModeloFormulario::route('/create'),
             'edit' => Pages\EditModeloFormulario::route('/{record}/edit'),
+            'view' => Pages\ViewModelo::route('/{record}'),
         ];
     }
 

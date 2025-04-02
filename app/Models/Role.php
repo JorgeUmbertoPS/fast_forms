@@ -26,9 +26,8 @@ class Role extends Model
     ];
 
     public static function updateRoles(){
-        $user = User::find(auth()->user()->id);
 
-        if($user->hasRole('SuperAdmin')){
+        if(auth()->user()->hasRole('SuperAdmin')){
 
             foreach(self::$models as $model){
 

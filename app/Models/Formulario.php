@@ -187,6 +187,47 @@ class Formulario extends Model
         );
     }
 
+    public static function ObterDadosView($id)
+    {
+        // Carregar blocos com suas perguntas e os tipos de resposta e máscara já carregados para evitar múltiplas consultas
+        $blocos = DB::table('formularios_perguntas_blocos')
+                    ->where('form_id', $id)
+                    ->orderBy('ordem')
+                    ->get();
+    
+        // Inicializar array de dados
+        $dados = [];
+    
+        if ($blocos->isNotEmpty()) {
+            foreach ($blocos as $bloco) {
+                // Carregar as perguntas do bloco e os tipos de resposta e máscaras relacionados
+                $perguntas = FormularioPergunta::where('bloco_id', $bloco->id)
+                            ->orderBy('ordem')
+                            ->get();
+    
+                // Se houver perguntas, processar
+                if ($perguntas->isNotEmpty()) {
+                    $resp_blocos = $perguntas->map(function ($pergunta) {
+                        return [
+                            'nome'                  => $pergunta->nome,
+                            'resposta_tipo'         => ModeloRespostaTipo::find($pergunta->resposta_tipo_id)['nome'] ?? '',
+                            'mascara'               => ModeloMascara::find($pergunta->mascara_id)['nome'] ?? '',
+                            'obriga_justificativa'  => $pergunta->obriga_justificativa == 1 ? 'Sim' : 'Não',
+                            'obriga_midia'          => $pergunta->obriga_midia == 1 ? 'Sim' : 'Não',
+                        ];
+                    });
+    
+                    // Adicionar o bloco ao array de dados
+                    $dados['bloco'][] = [
+                        'nome' => $bloco->descricao,
+                        'perguntas' => $resp_blocos->toArray()
+                    ];
+                }
+            }
+        }
+    
+        return $dados;
+    }
 
 
 }

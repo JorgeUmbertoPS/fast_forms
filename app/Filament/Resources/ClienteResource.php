@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\ClienteResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ClienteResource\RelationManagers;
+use Filament\Tables\Columns\ImageColumn;
 
 class ClienteResource extends Resource
 {
@@ -54,18 +55,6 @@ class ClienteResource extends Resource
                     Forms\Components\TextInput::make('cnpj')
                         ->label('CNPJ')
                         ->maxLength(18),   
-
-                    Forms\Components\TextInput::make('ie')
-                        ->label('IE')
-                        ->maxLength(15),
-
-                    Forms\Components\TextInput::make('im')
-                        ->label('IM')
-                        ->maxLength(15),
-
-                    Forms\Components\TextInput::make('cnae')
-                        ->label('CNAE')
-                        ->maxLength(7),
 
                     Forms\Components\TextInput::make('email')
                         ->label('Email')
@@ -105,10 +94,12 @@ class ClienteResource extends Resource
                     ->label('Nome'),
                 Tables\Columns\TextColumn::make('razao_social')
                     ->label('Razão Social'),
-                Tables\Columns\TextColumn::make('cnpj')
-                    ->label('CNPJ'),
                 Tables\Columns\TextColumn::make('email')
                     ->label('Email'),
+                //logo
+                ImageColumn::make('logo')
+                    ->label('Logotipo')
+                
             ])
             ->filters([
                 //

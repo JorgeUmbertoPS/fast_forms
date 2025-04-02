@@ -200,11 +200,11 @@ class Questionario extends Model
             $questionario->status = 0;
             $questionario->save();
             DB::commit();
-            return array('status' => true, 'mensagem' => 'Questionário finalizado com sucesso');
+            return array('return' => true, 'mensagem' => 'Questionário finalizado com sucesso');
         }
         catch(\Exception $e){
             DB::rollBack();
-            return array('status' => false, 'mensagem' => $e->getMessage());
+            return array('return' => false, 'mensagem' => $e->getMessage());
         }
 
     }

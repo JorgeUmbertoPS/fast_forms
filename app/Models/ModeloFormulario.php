@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\ModeloPergunta;
 use Illuminate\Support\Facades\DB;
 use App\Models\ModeloPerguntaBloco;
 use Illuminate\Support\Facades\Auth;
@@ -20,6 +21,14 @@ use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 class ModeloFormulario extends Model
 {
     use HasFactory;
+
+    //constantes para status
+    const STATUS_NAO_PEDIDO = 0;
+    const STATUS_FOI_PEDIDO = 1;
+    const STATUS_FOI_REJEITADO = 2;
+    const STATUS_FOI_LIBERADO = 3;
+    const STATUS_FOI_UTILIZADO = 4;
+    const STATUS_NAO_FOI_LIBERADO = 5;
 
     protected $table = "modelo_formularios";
 
@@ -48,14 +57,15 @@ class ModeloFormulario extends Model
         1 => 'Foi pedido',
         2 => 'Foi cancelado',
         3 => 'Foi liberado',
-        4 => 'Foi utilizado'
+        4 => 'Foi utilizado',
+        5 => 'Não foi liberado',
     ];
 
     public function segmento() {
         return $this->belongsTo(Segmento::class);
     }
 
-    public function EtapasModelos(){
+    public function EtapasModelos():HasMany{
         return $this->hasMany(ModeloPerguntaBloco::class, 'modelo_id');
     }
 
@@ -232,6 +242,49 @@ class ModeloFormulario extends Model
         }
     }
 
+
+
+    public static function ObterDadosView($id)
+    {
+        // Carregar blocos com suas perguntas e os tipos de resposta e máscara já carregados para evitar múltiplas consultas
+        $blocos = DB::table('modelo_perguntas_blocos')
+                    ->where('modelo_id', $id)
+                    ->orderBy('ordem')
+                    ->get();
+    
+        // Inicializar array de dados
+        $dados = [];
+    
+        if ($blocos->isNotEmpty()) {
+            foreach ($blocos as $bloco) {
+                // Carregar as perguntas do bloco e os tipos de resposta e máscaras relacionados
+                $perguntas = ModeloPergunta::where('bloco_id', $bloco->id)
+                            ->orderBy('ordem')
+                            ->get();
+    
+                // Se houver perguntas, processar
+                if ($perguntas->isNotEmpty()) {
+                    $resp_blocos = $perguntas->map(function ($pergunta) {
+                        return [
+                            'nome'                  => $pergunta->nome,
+                            'resposta_tipo'         => ModeloRespostaTipo::find($pergunta->resposta_tipo_id)['nome'] ?? '',
+                            'mascara'               => ModeloMascara::find($pergunta->mascara_id)['nome'] ?? '',
+                            'obriga_justificativa'  => $pergunta->obriga_justificativa == 1 ? 'Sim' : 'Não',
+                            'obriga_midia'          => $pergunta->obriga_midia == 1 ? 'Sim' : 'Não',
+                        ];
+                    });
+    
+                    // Adicionar o bloco ao array de dados
+                    $dados['bloco'][] = [
+                        'nome' => $bloco->descricao,
+                        'perguntas' => $resp_blocos->toArray()
+                    ];
+                }
+            }
+        }
+    
+        return $dados;
+    }
     
 
 
