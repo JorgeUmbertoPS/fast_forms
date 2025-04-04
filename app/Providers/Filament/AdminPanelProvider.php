@@ -55,7 +55,6 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogoHeight('3.5em')
             ->defaultThemeMode(ThemeMode::Dark)
             ->databaseNotifications()
-            ->plugin(FilamentSpatieRolesPermissionsPlugin::make())
             ->colors([
                 'primary' => Color::Green,
                 'confirma' => Color::Yellow,

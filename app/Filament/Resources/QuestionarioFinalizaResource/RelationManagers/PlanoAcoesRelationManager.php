@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\QuestionarioConfigResource\RelationManagers;
+namespace App\Filament\Resources\QuestionarioFinalizaResource\RelationManagers;
 
 use Filament\Forms;
 use App\Models\User;
@@ -11,6 +11,7 @@ use Filament\Tables\Table;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Resources\RelationManagers\RelationManager;
 
 class PlanoAcoesRelationManager extends RelationManager
@@ -63,5 +64,10 @@ class PlanoAcoesRelationManager extends RelationManager
             ->bulkActions([
 
             ]);
+    }
+
+    public static function canViewForRecord(Model $ownerRecord, string $pageClass): bool
+    {
+        return $ownerRecord->gera_plano_acao === true; // ou qualquer condição que você quiser
     }
 }

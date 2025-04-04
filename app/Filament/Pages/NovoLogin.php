@@ -78,8 +78,6 @@ class NovoLogin extends Login
 
         session()->regenerate();
 
-        Role::updateRoles();
-
         return app(LoginResponse::class);
     }
 

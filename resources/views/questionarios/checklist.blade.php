@@ -2,10 +2,11 @@
         <table class="w-full">
             <tr>
                 <td style="width: 80%; height: 40px; text-align: center">Questionário <b> {{($questionario['nome']);}}</b></td>
-                <td style="text-align: right"><img src={{ @$questionario['empresa']['logo'] }}  style="width: 100px; height: 100px;"></td>
+                <td style="width: 20%; text-align: right; vertical-align: top;">
+                <img src="{{ asset('storage/logos/' . $questionario['empresa']['logo']) }}" style="width: 100px; height: 100px;">
+
+                </td>
             </tr>
-
-
         </table>
 
         <div class="w-full">

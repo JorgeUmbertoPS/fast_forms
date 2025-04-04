@@ -59,36 +59,14 @@ class UserResource extends Resource
                         ->required()
                         ->unique(ignoreRecord: true),
 
-                    Forms\Components\Select::make('roles')
-                        ->relationship(name: 'roles_cliente', titleAttribute: 'name')->visible(
-                            function($record){
-                                if(auth()->user()->hasRole('SuperAdmin')){
-                                    return false;
-                                }
-                                return true;
-                            }
-                        ),
 
-                    Forms\Components\Select::make('roles')
-                        ->relationship(name: 'roles_users', titleAttribute: 'name')->visible(
-                            function($record){
-                                if(auth()->user()->hasRole('SuperAdmin')){
-                                    return true;
-                                }
-                                return false;
-                            }
-                        )
-
-                    //->multiple()
-                    ->preload()
-                    ->searchable(),
                     Select::make('empresa_id')
                         ->options(Empresa::pluck('nome','id'))
                         ->required()
                         ->label('Empresa')
                         ->visible(
                             function($record){
-                                if(auth()->user()->hasRole('SuperAdmin')){
+                                if(auth()->user()->SuperAdmin()){
                                     return true;
                                 }
                                 return false;
@@ -194,7 +172,7 @@ class UserResource extends Resource
         else
             $user = new User();
                 
-        if(!$user->hasRole('SuperAdmin')){
+        if(!auth()->user()->SuperAdmin()){
             return parent::getEloquentQuery()
                     ->where('empresa_id', auth()->user()->empresa_id)
                     ->where('name', '<>', 'SuperAdmin');

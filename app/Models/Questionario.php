@@ -37,7 +37,21 @@ class Questionario extends Model
         'updated_at',
         'modelo_relatorio_id',
         'titulo',
+        'gera_plano_acao',
+        'resumo',
+        'arquivo_pdf'
+    ];
 
+    //casts
+    protected $casts = [
+
+        'criar_resumo' => 'boolean',
+        'envia_email_etapas' => 'boolean',
+        'obriga_assinatura' => 'boolean',
+        'avisar_dias_antes' => 'integer',
+        'gera_plano_acao' => 'boolean',
+        'data_inicio' => 'datetime:Y-m-d H:i:s',
+        'data_termino' => 'datetime:Y-m-d H:i:s',
     ];
 
     protected $hidden = [
@@ -192,26 +206,24 @@ class Questionario extends Model
     }
     
 
-    public static function FinalizarQuestionario($id){
-
-        try{
-            DB::beginTransaction();
-            $questionario = Questionario::where('id', $id)->first();
-            $questionario->status = 0;
-            $questionario->save();
-            DB::commit();
-            return array('return' => true, 'mensagem' => 'Questionário finalizado com sucesso');
-        }
-        catch(\Exception $e){
-            DB::rollBack();
-            return array('return' => false, 'mensagem' => $e->getMessage());
-        }
-
-    }
-
     // relatorio
     public function relatorio():hasOne{
         return $this->hasOne(ModeloRelatorio::class, 'id', 'modelo_relatorio_id');
+    }
+
+    public static function InconsistenciasAntesDeFechar($state){
+
+        $inconsistencias = [];
+
+        $sem_resposta = QuestionarioPergunta::where('questionario_id', $state->id)
+                                    ->whereNull('resposta')
+                                    ->count();
+        if($sem_resposta > 0){
+            $inconsistencias[] = 'Existem perguntas sem resposta';
+        }
+
+        return $inconsistencias;
+
     }
 
 }

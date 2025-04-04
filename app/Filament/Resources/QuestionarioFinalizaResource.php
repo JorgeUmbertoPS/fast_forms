@@ -9,22 +9,45 @@ use Filament\Tables\Table;
 use App\Models\Questionario;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Section;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\QuestionarioFinalizaResource\Pages;
-use App\Filament\Resources\QuestionarioFinalizaResource\RelationManagers;
-use App\Filament\Resources\QuestionarioConfigResource\RelationManagers\PlanoAcoesRelationManager;
+use App\Filament\Resources\QuestionarioFinalizaResource\RelationManagers\PlanoAcoesRelationManager;
+
 
 class QuestionarioFinalizaResource extends Resource
 {
     protected static ?string $model = Questionario::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static bool $shouldRegisterNavigation = false;
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
+
+                Section::make('Inconsistências')
+                ->description('Inconsistências que precisam ser resolvidas antes de finalizar o questionário')
+                ->icon('heroicon-o-exclamation-triangle')
+                ->iconColor('danger')
+                ->schema([
+                    Forms\Components\Grid::make()
+                        ->schema([
+                            Forms\Components\ViewField::make('inconsistencias')
+                                ->view('filament.pages.questionario-finaliza-inconsistencias')
+                                ->label('Inconsistências')
+                                ->afterStateHydrated(function ($component, $record) {
+                                    $inconsistencias = [];
+                                    $inconsistencias = Questionario::InconsistenciasAntesDeFechar($record);
+                                    $component->state($inconsistencias);
+                                })
+                                ->columnSpan(4),
+                        ])->columns(1),
+
+                ])
+                ->visible(
+                    fn (callable $get) => $get('inconsistencias') != null
+                )
+                ->columns(4),
 
                 Section::make('Dados do Questionário')
                     ->description('Dados do Questionário que será finalizado')
@@ -43,14 +66,26 @@ class QuestionarioFinalizaResource extends Resource
                             ->label('Data de Término')
                             ->disabled()
                             ->columnSpan(1),
+
+                        // toogle com status
+                        Forms\Components\Toggle::make('status')
+                            ->label('Status')
+                            ->columnSpan(1)
+                            ->onColor('success')
+                            ->offColor('danger')
+                            ->inline(),
                 ])->columns(4),
+
+
 
                 Section::make('Finalização do Questionário')
                     ->description('Dados do Questionário que será finalizado')
                     ->schema([
                         Forms\Components\RichEditor::make('resumo')
                             ->label('Resumo')
-                            ->required()
+                            ->required(
+                                fn (callable $get) => $get('criar_resumo') == true
+                            )
                             ->placeholder('Resumo'),
                     ])->columns(1),
 

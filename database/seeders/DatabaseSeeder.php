@@ -14,6 +14,7 @@ use Spatie\Permission\Models\Role;
 use App\Models\ModeloRespostaPontuacao;
 use Spatie\Permission\Models\Permission;
 use App\Models\ModeloRespostaPontuacaoItem;
+use App\Models\PerfilModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -92,22 +93,10 @@ class DatabaseSeeder extends Seeder
         ModeloRespostaTipo::insert(['nome' => 'Alternativa',      'componente' => 'RadioButton']);
         ModeloRespostaTipo::insert(['nome' => 'Valor',            'componente' => 'TextBox']);
 
-        Role::insert([
-                ['name' => 'SuperAdmin',  'guard_name' => 'web', 'empresa_id' => 1],
-                ['name' => 'UserAdmin',  'guard_name' => 'web', 'empresa_id' => 1],
-                ['name' => 'ClienteAdmin', 'guard_name' => 'web', 'empresa_id' => null],
-                ['name' => 'ClienteUser',  'guard_name' => 'web', 'empresa_id' => null]
+        PerfilModel::insert([
+                ['nome' => 'Super Admin',  'descricao' => 'Administrador FastForms', 'empresa_id' => 1, 'perfil_admin' => 1, 'perfil_cliente' => 0],
+                ['nome' => 'User Admin',  'descricao' => 'Usuário FastForms', 'empresa_id' => 1, 'perfil_admin' => 1, 'perfil_cliente' => 0],
         ]);        
-
-        DB::table('model_has_roles')->insert(['role_id' => '1', 'model_type' => 'App\Models\User', 'model_id' => '1']);
-        DB::table('model_has_roles')->insert(['role_id' => '2', 'model_type' => 'App\Models\User', 'model_id' => '1']);
-
-        /*DB::table('model_has_roles')->insert(['role_id' => '2', 'model_type' => 'App\Models\User', 'model_id' => '2']);
-        DB::table('model_has_roles')->insert(['role_id' => '3', 'model_type' => 'App\Models\User', 'model_id' => '1']);
-        DB::table('model_has_roles')->insert(['role_id' => '3', 'model_type' => 'App\Models\User', 'model_id' => '2']);
-        DB::table('model_has_roles')->insert(['role_id' => '3', 'model_type' => 'App\Models\User', 'model_id' => '3']);*/
-
-
 
         User::insert([
             "name" => "Admin",
@@ -121,29 +110,6 @@ class DatabaseSeeder extends Seeder
             'updated_at' => Date("Y-m-d H:i:s"),
         ]);  
         
-        $models = [
-            'Empresas', 'FormularioPergunta', 'FormularioPerguntaBloco', 
-            'FormularioPerguntaTipo', 'FormularioResposta', 'FormularioRespostaPontuacao', 
-            'FormularioRespostaPontuacaoItem', 'FormularioRespostaMidia', 'ChkFormulario', 
-            'ChkFormularioUser', 'ChkFormularioPergunta', 'ChkFormularioPerguntaBloco', 
-            'ChkFormularioPerguntaTipo', 'ChkFormularioPerguntaMidia', 'ChkFormularioPerguntaResposta', 
-            'ChkFormularioPerguntaRespostaItem', 'ChkFormularioPerguntaRespostaMidia', 
-            'ChkFormularioPerguntaRespostaPontuacao', 'ChkFormularioPerguntaRespostaPontuacaoItem'
-        ];
 
-        foreach($models as $model){
-            Permission::create(['name' => 'Listar '  .$model, 'guard_name' => 'web']);
-            Permission::create(['name' => 'Criar '   .$model, 'guard_name' => 'web']);
-            Permission::create(['name' => 'Editar '  .$model, 'guard_name' => 'web']);
-            Permission::create(['name' => 'Excluir ' .$model, 'guard_name' => 'web']);
-            Permission::create(['name' => 'Importar '.$model, 'guard_name' => 'web']);
-        }
-
-        // pegar todas as roles que o empresa_id é null e criar todas as permissoes em role_has_permissions
-        $roles = Role::where('empresa_id', null)->get();
-        foreach($roles as $role){
-            $permissions = Permission::all();
-            $role->syncPermissions($permissions);
-        }
     }
 }

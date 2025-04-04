@@ -26,9 +26,11 @@ class QuestionarioResource extends Resource
     protected static ?string $navigationGroup = 'Questionários';
     protected static ?string $navigationIcon = 'heroicon-o-sparkles';
     protected static ?int $navigationSort = 3;
+
+
     use TraitSomenteUsuario;
     
-    //protected static bool $shouldRegisterNavigation = false;
+    
 
     public static function table(Table $table): Table
     {
@@ -49,7 +51,11 @@ class QuestionarioResource extends Resource
 
             ])
             ->filters([
-                //
+                // FILTRO DE STATUS MARCADO COMO FINALIZADO
+                Tables\Filters\Filter::make('status')
+                    ->label('Status')
+                    ->query(fn (Builder $query): Builder => $query->where('status', 1))
+                    ->default(),
             ])
             ->actions([
                 Tables\Actions\Action::make('resposnder')
