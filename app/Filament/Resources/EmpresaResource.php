@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\EmpresaResource\RelationManagers;
 use App\Filament\Resources\UserResource\RelationManagers\UsersEmpresasRelationManager;
 use App\Filament\Resources\EmpresaResource\RelationManagers\EmpresasModelosRelationManager;
+use App\Models\PermissaoModel;
 
 class EmpresaResource extends Resource
 {
@@ -171,4 +172,7 @@ class EmpresaResource extends Resource
             'edit' => Pages\EditEmpresa::route('/{record}/edit'),
         ];
     }
+
+
+
 }

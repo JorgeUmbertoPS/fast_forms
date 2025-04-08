@@ -7,6 +7,8 @@ use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\Questionario;
+use App\Models\PermissaoModel;
+use App\Models\ModeloRelatorio;
 use Filament\Resources\Resource;
 use App\Traits\TraitSomenteUsuario;
 use Filament\Tables\Actions\Action;
@@ -15,7 +17,6 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\QuestionarioConfigResource\Pages;
 use App\Filament\Resources\QuestionarioConfigResource\RelationManagers;
 use App\Filament\Resources\QuestionarioConfigResource\RelationManagers\PlanoAcoesRelationManager;
-use App\Models\ModeloRelatorio;
 
 class QuestionarioConfigResource extends Resource
 {
@@ -29,6 +30,11 @@ class QuestionarioConfigResource extends Resource
     protected static ?string $pluralLabel = 'Configurar Questionários';
     protected static ?string $navigationGroup = 'Questionários';
     protected static ?int $navigationSort = 2;
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return PermissaoModel::hasPermission('manipular-configurar_questionarios');
+    }   
 
     public static function form(Form $form): Form
     {

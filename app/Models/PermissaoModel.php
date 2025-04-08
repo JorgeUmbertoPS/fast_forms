@@ -22,15 +22,16 @@ class PermissaoModel extends Model
         'updated_at' => 'datetime',
     ];
 
-    public function perfilPermissao()
+    // consulta se existe um slug juntando com a tabela perfil_permissoes
+    public static function hasPermission($slug)
     {
-        return $this->hasMany(PerfilPermissaoModel::class, 'permissao_id');
+        $permissao_existe = self::where('slug', $slug)
+                            ->join('perfil_permissao', 'perfil_permissao.permissao_id', '=', 'permissoes.id')
+                            ->join('perfis', 'perfis.id', '=', 'perfil_permissao.perfil_id')
+                            ->where('perfil_permissao.empresa_id', auth()->user()->empresa_id)
+                            ->exists();
+                         //   dd($permissao_existe);
+        return $permissao_existe ? true : false;
     }
-
-    public function perfis()
-    {
-        return $this->belongsToMany(PerfilModel::class, 'perfil_permissao', 'permissao_id', 'perfil_id');
-    }
-
     
 }

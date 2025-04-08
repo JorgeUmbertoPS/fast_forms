@@ -7,18 +7,19 @@ use App\Models\User;
 use Filament\Tables;
 use App\Models\Perfil;
 use App\Models\Empresa;
-use function Psy\debug;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Traits\TraitOnlyTeam;
+use App\Models\PermissaoModel;
 use Filament\Resources\Resource;
+use Illuminate\Support\Facades\DB;
 use Filament\Tables\Filters\Filter;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Filament\Forms\Components\Hidden;
+
 use Filament\Forms\Components\Select;
 use Spatie\Permission\Contracts\Role;
-
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
@@ -29,8 +30,6 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Resources\RelationManagers\RelationGroup;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Filament\Resources\UserResource\RelationManagers\UsersEmpresasRelationManager;
-use Illuminate\Support\Facades\DB;
-use Nette\Utils\Random;
 
 class UserResource extends Resource
 {
@@ -45,6 +44,11 @@ class UserResource extends Resource
     protected static ?string $navigationGroup = 'Administração';
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return PermissaoModel::hasPermission('manipular-usuarios');
+    }  
 
     public static function form(Form $form): Form
     {

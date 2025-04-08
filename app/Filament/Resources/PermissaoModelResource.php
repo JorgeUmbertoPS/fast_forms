@@ -25,6 +25,11 @@ class PermissaoModelResource extends Resource
     protected static ?string $navigationGroup = 'Administração';
     protected static ?string $navigationIcon = 'heroicon-o-list-bullet';
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return PermissaoModel::hasPermission('manipular-permissoes');
+    }  
+
     public static function form(Form $form): Form
     {
         return $form

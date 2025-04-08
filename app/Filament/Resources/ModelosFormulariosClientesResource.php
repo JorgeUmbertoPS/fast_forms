@@ -8,6 +8,7 @@ use Filament\Tables;
 use Filament\Forms\Get;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Models\PermissaoModel;
 use App\Models\ModeloFormulario;
 use Filament\Resources\Resource;
 use App\Models\ModeloRespostaTipo;
@@ -42,6 +43,10 @@ class ModelosFormulariosClientesResource extends Resource
 
     protected static ?int $navigationSort = 0;
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return PermissaoModel::hasPermission('manipular-modelos');
+    }  
 
     public static function form(Form $form): Form
     {

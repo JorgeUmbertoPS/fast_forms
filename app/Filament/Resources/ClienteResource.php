@@ -8,16 +8,17 @@ use App\Models\Cliente;
 use App\Models\Empresa;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Models\PermissaoModel;
 use Filament\Resources\Resource;
 use App\Traits\TraitSomenteUsuario;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\FileUpload;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\ClienteResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ClienteResource\RelationManagers;
-use Filament\Tables\Columns\ImageColumn;
 
 class ClienteResource extends Resource
 {
@@ -32,6 +33,11 @@ class ClienteResource extends Resource
     protected static ?string $navigationGroup = 'Administração';
 
     protected static ?string $navigationIcon = 'heroicon-o-home';
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return PermissaoModel::hasPermission('manipular-clientes');
+    }    
 
     public static function form(Form $form): Form
     {

@@ -11,6 +11,7 @@ use Filament\Forms\Form;
 use App\Models\Formulario;
 use Filament\Tables\Table;
 use App\Models\ModeloMascara;
+use App\Models\PermissaoModel;
 
 use App\Models\ModeloFormulario;
 use Filament\Resources\Resource;
@@ -44,6 +45,11 @@ class FormularioResource extends Resource
     protected static ?string $navigationGroup = 'Configurar Formulários';
     protected static ?string $navigationIcon = 'heroicon-o-newspaper';
     protected static ?int $navigationSort = 1;
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return PermissaoModel::hasPermission('manipular-formularios');
+    }    
 
     public static function form(Form $form): Form
     {

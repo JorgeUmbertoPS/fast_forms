@@ -7,6 +7,7 @@ use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\Questionario;
+use App\Models\PermissaoModel;
 use Filament\Resources\Resource;
 use App\Traits\TraitSomenteUsuario;
 use Filament\Notifications\Notification;
@@ -27,6 +28,10 @@ class QuestionarioResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-sparkles';
     protected static ?int $navigationSort = 3;
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return PermissaoModel::hasPermission('manipular-responder_questionarios');
+    }  
 
     use TraitSomenteUsuario;
     

@@ -2,14 +2,31 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class PerfilPermissaoModel extends Model
 {
     use HasFactory;
 
     protected $table = 'perfil_permissao';
+    protected static function booted(): void
+    {
+        // SE USUARIO ESTIVER LOGADO
+        if(auth()->check()){
+
+            static::addGlobalScope('empresas', function (Builder $query) {
+                    $query->where('perfil_permissao.empresa_id', auth()->user()->empresa_id);
+            });
+        }
+        else{
+            static::addGlobalScope('empresas', function (Builder $query) {
+                $query->where('perfil_permissao.empresa_id', 0);
+            });
+        }
+    }
 
     protected $fillable = [
         'perfil_id',

@@ -15,6 +15,7 @@ use App\Models\ModeloRespostaPontuacao;
 use Spatie\Permission\Models\Permission;
 use App\Models\ModeloRespostaPontuacaoItem;
 use App\Models\PerfilModel;
+use App\Models\PermissaoModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -96,7 +97,19 @@ class DatabaseSeeder extends Seeder
         PerfilModel::insert([
                 ['nome' => 'Super Admin',  'descricao' => 'Administrador FastForms', 'empresa_id' => 1, 'perfil_admin' => 1, 'perfil_cliente' => 0],
                 ['nome' => 'User Admin',  'descricao' => 'Usuário FastForms', 'empresa_id' => 1, 'perfil_admin' => 1, 'perfil_cliente' => 0],
-        ]);        
+        ]);   
+        
+        $models = [
+            'cliente', 'usuario', 'modelos', 'formularios', 'configurar_questionarios', 'responder_questionarios'
+        ];
+        foreach ($models as $model) {
+            PermissaoModel::create([
+                'nome' => ucfirst($model),
+                'descricao' => 'Permissão para o módulo ' . ucfirst($model),
+                'slug' => 'manipular-' . $model,
+            ]);
+        }
+
 
         User::insert([
             "name" => "Admin",
