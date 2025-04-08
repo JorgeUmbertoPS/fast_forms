@@ -90,6 +90,13 @@ class PerfilModelResource extends Resource
         ];
     }
 
+    //query
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+                ->where('perfil_cliente', 1);
+      
+    }
     
 
     public static function getPages(): array

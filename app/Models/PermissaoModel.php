@@ -29,6 +29,7 @@ class PermissaoModel extends Model
                             ->join('perfil_permissao', 'perfil_permissao.permissao_id', '=', 'permissoes.id')
                             ->join('perfis', 'perfis.id', '=', 'perfil_permissao.perfil_id')
                             ->where('perfil_permissao.empresa_id', auth()->user()->empresa_id)
+                            ->where('perfis.id', auth()->user()->perfil_id)
                             ->exists();
                          //   dd($permissao_existe);
         return $permissao_existe ? true : false;

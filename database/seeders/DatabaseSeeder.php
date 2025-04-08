@@ -97,6 +97,8 @@ class DatabaseSeeder extends Seeder
         PerfilModel::insert([
                 ['nome' => 'Super Admin',  'descricao' => 'Administrador FastForms', 'empresa_id' => 1, 'perfil_admin' => 1, 'perfil_cliente' => 0],
                 ['nome' => 'User Admin',  'descricao' => 'Usuário FastForms', 'empresa_id' => 1, 'perfil_admin' => 1, 'perfil_cliente' => 0],
+                ['nome' => 'Cliente Admin',  'descricao' => 'Cliente FastForms', 'empresa_id' => 1, 'perfil_admin' => 0, 'perfil_cliente' => 1],
+                ['nome' => 'Cliente User',  'descricao' => 'Cliente FastForms', 'empresa_id' => 1, 'perfil_admin' => 0, 'perfil_cliente' => 1],
         ]);   
         
         $models = [

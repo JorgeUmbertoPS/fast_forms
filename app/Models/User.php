@@ -36,6 +36,7 @@ class User extends Authenticatable implements FilamentUser
         'empresa_id',
         'admin_cliente',
         'admin_empresa',
+        'perfil_id',
     ];
 
     public function canAccessPanel(Panel $panel): bool

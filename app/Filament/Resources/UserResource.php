@@ -30,6 +30,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Resources\RelationManagers\RelationGroup;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Filament\Resources\UserResource\RelationManagers\UsersEmpresasRelationManager;
+use App\Models\PerfilModel;
 
 class UserResource extends Resource
 {
@@ -76,6 +77,11 @@ class UserResource extends Resource
                                 return false;
                             }
                         ),
+
+                    Select::make('perfil_id')
+                    ->options(PerfilModel::where('perfil_cliente', 1)->pluck('nome','id'))
+                    ->required()
+                    ->label('Perfil')                     
 
                 ])->columns(2)
 
