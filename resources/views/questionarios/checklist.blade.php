@@ -1,13 +1,15 @@
 <div class="margin-top">
-        <table class="w-full">
-            <tr>
-                <td style="width: 80%; height: 40px; text-align: center">Questionário <b> {{($questionario['nome']);}}</b></td>
-                <td style="width: 20%; text-align: right; vertical-align: top;">
-                <img src="{{ asset('storage/logos/' . $questionario['empresa']['logo']) }}" style="width: 100px; height: 100px;">
-
-                </td>
-            </tr>
-        </table>
+    <table style="width: 100%; table-layout: fixed;">
+        <tr>
+            <td style="width: 80%; vertical-align: middle; text-align: left;">
+                Questionário <b>{{ $questionario['nome'] }}</b>
+            </td>
+            <td style="width: 20%; vertical-align: top; text-align: right;">
+                <img src="{{ $questionario['empresa']['logo_base_64'] }}"
+                    style="width: 100px; height: auto; display: block; margin-left: auto;">
+            </td>
+        </tr>
+    </table>
 
         <div class="w-full">
 

@@ -7,7 +7,7 @@
     </div>
     @endif
 
-    <form wire:submit.prevent="saveTexto">
+    <form wire:submit.prevent="saveText">
  
         {{ csrf_field() }}
     
@@ -26,23 +26,23 @@
               <div class="grid grid-cols-3 gap-3 m-1 "> 
                   @foreach ($blocos->perguntas_questionario as $pergunta)           
                         
-                    @if($pergunta->resposta_tipo_id == 3)
-                        <label class="text-lg font-bold"> {{ $pergunta->pergunta_nome }} </label>
-                        
-                        <x-filament::input.wrapper>
-                            <x-filament::input 
-                                type="{{ $pergunta->mascara->mascara }}" 
-                                required 
-                                wire:model="respostas.{{$pergunta->id}}" 
-                                wire:blur="saveText({{ $pergunta->id }}, $event.target.value)"
-                                value="{{$pergunta->resposta}}" 
-                                placeholder="Digite sua resposta no formato {{$pergunta->mascara->mascara }}" />
-                        </x-filament::input.wrapper>
+                        @if($pergunta->resposta_tipo_id == 3)
+                            <label class="text-lg font-bold"> {{ $pergunta->pergunta_nome }} </label>
+                            
+                            <x-filament::input.wrapper>
+                                <x-filament::input 
+                                    type="{{ $pergunta->mascara->mascara }}" 
+                                    required 
+                                    wire:model="respostas.{{$pergunta->id}}" 
+                                    wire:blur="saveText({{ $pergunta->id }}, $event.target.value)"
+                                    value="{{$pergunta->resposta}}" 
+                                    placeholder="Digite sua resposta no formato {{$pergunta->mascara->mascara }}" />
+                            </x-filament::input.wrapper>
 
-                        @error('respostas.'.$pergunta->id)
-                            <span class="text-red-700 text-sm">{{ $message }}</span>
-                        @enderror
-                    @endif
+                            @error('respostas.'.$pergunta->id)
+                                <span class="text-red-700 text-sm">{{ $message }}</span>
+                            @enderror
+                        @endif
 
 
                         @if($pergunta->resposta_tipo_id == 2)
@@ -77,22 +77,41 @@
                                 </label>
                             @endforeach
 
+                            @if($pergunta->obriga_justificativa == 1)
+                                <div class="mt-2">
+                                    <x-filament::input.wrapper>
+                                        <x-filament::input 
+                                            type="text"
+                                            wire:model.lazy="justificativas.{{ $pergunta->id }}"
+                                            wire:blur="salvarJustificativa({{ $pergunta->id }})"
+                                            wire:model="justificativas.{{$pergunta->id}}"
+                                            placeholder="Digite sua justificativa..."
+
+                                        />
+                                    </x-filament::input.wrapper>
+                                </div>
+                            @endif
+
+                            @if($pergunta->obriga_midia == 1)
+                                <div class="mt-2">
+                                    <input 
+                                        type="file" 
+                                        accept="image/*" 
+                                        wire:model="uploads.{{ $pergunta->id }}"
+                                    />
+
+                                    @if(isset($imagensBase64[$pergunta->id]))
+                                        <div class="mt-2">
+                                            <img src="{{ $imagensBase64[$pergunta->id] }}" style="width: 100px;">
+                                        </div>
+                                    @endif
+                                </div>
+                            @endif
                         </x-filament::fieldset>
 
                         @endif                                     
                   @endforeach
 
-                  @if($pergunta->obriga_justificativa == 0)
-                    <div class="mt-2">
-                        <x-filament::input.wrapper>
-                            <x-filament::input 
-                                type="text"
-                                wire:model="justificativas.{{$pergunta->id}}"
-                                placeholder="Digite sua justificativa..."
-                            />
-                        </x-filament::input.wrapper>
-                    </div>
-                @endif
               </div>
             </x-filament::section>
      

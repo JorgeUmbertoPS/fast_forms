@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use Illuminate\Http\Request;
+use Livewire\WithFileUploads;
 use Livewire\Attributes\Validate;
 use Illuminate\Support\Facades\DB;
 use App\Models\QuestionarioPergunta;
@@ -15,6 +16,8 @@ class Questionario extends Component
     public $questionario;
 
     public $respostas = [];
+
+    public $justificativas = [];
 
     public $respostas_radio = [];
 
@@ -85,11 +88,43 @@ class Questionario extends Component
         // Preenche o array de respostas com os valores salvos no banco de dados
         foreach ($respostas as $resposta) {
             $this->respostas[$resposta->id] = $resposta->resposta; // 'resposta_salva' é o campo com o valor no banco
-            
+            $this->justificativas[$resposta->id] = $resposta->justificativa ?? '';
         }
 
+     
       //  dd($this->respostas);
 
+    }
+
+    use WithFileUploads;
+
+    public $uploads = []; // arquivos temporários
+    public $imagensBase64 = []; // imagens convertidas
+
+    public function updatedUploads($value, $key)
+    {
+        // pega o ID da pergunta
+        $perguntaId = explode('.', $key)[1];
+
+        if (isset($this->uploads[$perguntaId])) {
+            $file = $this->uploads[$perguntaId];
+
+            $this->imagensBase64[$perguntaId] =
+                'data:image/' . $file->getClientOriginalExtension() . ';base64,' .
+                base64_encode(file_get_contents($file->getRealPath()));
+        }
+    }
+
+    public function salvarJustificativa($perguntaId)
+    {
+        $justificativa = $this->justificativas[$perguntaId] ?? null;
+
+        if ($justificativa !== null) {
+            DB::table('questionarios_perguntas')->updateOrInsert(
+                ['pergunta_id' => $perguntaId],
+                ['justificativa' => $justificativa, 'updated_at' => now()]
+            );
+        }
     }
 
     public function render()

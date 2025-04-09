@@ -13,6 +13,8 @@ use Filament\Resources\Resource;
 use App\Traits\TraitSomenteUsuario;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Textarea;
+use Illuminate\Support\Facades\Storage;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\FileUpload;
 use Illuminate\Database\Eloquent\Builder;
@@ -83,7 +85,7 @@ class ClienteResource extends Resource
                         ->deletable(true)
                       //  ->preserveFilenames(false)    
                         ->maxSize(1024)
-                        ->directory('logos')                   
+                        ->directory('logos'),
 
                     ])->columns(4),
 
@@ -91,6 +93,25 @@ class ClienteResource extends Resource
 
             ]);
     }
+
+    protected static function afterSave($record): void
+    {
+        dd($record);
+        if ($record->logo && Storage::disk('public')->exists($record->logo)) {
+            $filePath = Storage::disk('public')->path($record->logo);
+            $extension = pathinfo($filePath, PATHINFO_EXTENSION);
+            $fileContent = file_get_contents($filePath);
+
+            $record->logo_base_64 = 'data:image/' . $extension . ';base64,' . base64_encode($fileContent);
+            $record->save();
+
+            // (opcional) apagar o arquivo físico
+            // Storage::disk('public')->delete($record->logo);
+            // $record->logo = null;
+            // $record->save();
+        }
+    }
+    
 
     public static function table(Table $table): Table
     {

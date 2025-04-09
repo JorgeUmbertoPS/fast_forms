@@ -21,8 +21,8 @@ class Cliente extends Model
         "cnae",
         "telefone",
         "logo",
-        "im"
-        
+        "im",
+        'imagem_base64'
     ];
 
     protected static function booted(): void
