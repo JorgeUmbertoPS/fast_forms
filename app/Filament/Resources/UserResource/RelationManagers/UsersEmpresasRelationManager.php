@@ -20,6 +20,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Components\FormComponentes;
+use App\Models\PerfilModel;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Notifications\Auth\CustomResetPassword;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -36,8 +37,7 @@ class UsersEmpresasRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                //Hidden::make('empresa_id'),
-                //Hidden::make('admin_cliente'),
+
                     TextInput::make('name')
                         ->autofocus()
                         ->required(),    
@@ -111,17 +111,19 @@ class UsersEmpresasRelationManager extends RelationManager
             $data['empresa_id'] = $model->id;
             $data['password'] = bcrypt($data['password']);  
             $data['admin_cliente'] = 1;
+            $data['perfil_id'] = PerfilModel::PERFIL_CLIENTE_ADMIN; // Define o perfil como Admin Cliente
             return $data;
         });
         
+        /*
         $action->using(function (array $data): User {
 
             $user = DB::table('users')->insert($data);
             $user = User::where('email', $data['email'])->first();
-            $user->assignRole('ClienteAdmin'); // Substitua pelo nome da role desejada
+            $user->assignRole('Cliente Admin'); // Substitua pelo nome da role desejada
     
             return $user;
-        });
+        });*/
         
 
     }

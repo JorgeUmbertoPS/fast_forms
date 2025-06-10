@@ -82,12 +82,15 @@ class User extends Authenticatable implements FilamentUser
 
     public static function SuperAdmin():bool{
         $user = User::find(auth()->user()->id);
-        return $user->admin_empresa == 1;
+        //dd($user);
+        return $user->perfil_id == PerfilModel::PERFIL_SUPER_ADMIN;
     }
 
     public function empresa_has_one(){
         return $this->hasOne(Empresa::class, 'id', 'empresa_id');
     }
+
+
 
 
 }

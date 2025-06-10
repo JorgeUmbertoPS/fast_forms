@@ -16,7 +16,6 @@ return new class extends Migration
             $table->id();
             $table->string('nome')->unique();
             $table->string('descricao')->nullable();
-            $table->integer('perfil_admin')->default(0);
             $table->integer('perfil_cliente')->default(0);
             $table->timestamps();
         });

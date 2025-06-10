@@ -33,6 +33,13 @@ class DatabaseSeeder extends Seeder
             'updated_at' => Date("Y-m-d H:i:s"),
         ]);
 
+        PerfilModel::insert([
+                ['nome' => 'Super Admin',  'descricao' => 'Administrador FastForms', 'perfil_cliente' => 0],
+                ['nome' => 'User Admin',  'descricao' => 'Usuário FastForms', 'perfil_cliente' => 0],
+                ['nome' => 'Cliente Admin',  'descricao' => 'Administrador do Cliente', 'perfil_cliente' => 1],
+                ['nome' => 'Cliente User',  'descricao' => 'Usuário do Cliente', 'perfil_cliente' => 1],
+        ]);  
+
         User::insert([
             "name" => "SuperAdmin",
             'email' => "superadmin@fastforms.com.br",
@@ -40,6 +47,7 @@ class DatabaseSeeder extends Seeder
             "password" => Hash::make('admin123'),
             'empresa_id' => 1,
             'ativo' => 1,
+            'perfil_id' => PerfilModel::PERFIL_SUPER_ADMIN,
             'remember_token' => NULL,
             'created_at' => Date("Y-m-d H:i:s"),
             'updated_at' => Date("Y-m-d H:i:s"),
@@ -93,13 +101,6 @@ class DatabaseSeeder extends Seeder
         ModeloRespostaTipo::insert(['nome' => 'Multipla Escolha', 'componente' => 'CheckBox']);
         ModeloRespostaTipo::insert(['nome' => 'Alternativa',      'componente' => 'RadioButton']);
         ModeloRespostaTipo::insert(['nome' => 'Valor',            'componente' => 'TextBox']);
-
-        PerfilModel::insert([
-                ['nome' => 'Super Admin',  'descricao' => 'Administrador FastForms', 'empresa_id' => 1, 'perfil_admin' => 1, 'perfil_cliente' => 0],
-                ['nome' => 'User Admin',  'descricao' => 'Usuário FastForms', 'empresa_id' => 1, 'perfil_admin' => 1, 'perfil_cliente' => 0],
-                ['nome' => 'Cliente Admin',  'descricao' => 'Cliente FastForms', 'empresa_id' => 1, 'perfil_admin' => 0, 'perfil_cliente' => 1],
-                ['nome' => 'Cliente User',  'descricao' => 'Cliente FastForms', 'empresa_id' => 1, 'perfil_admin' => 0, 'perfil_cliente' => 1],
-        ]);   
         
         $models = [
             'cliente', 'usuario', 'modelos', 'formularios', 'configurar_questionarios', 'responder_questionarios'

@@ -79,7 +79,7 @@ class UserResource extends Resource
                         ),
 
                     Select::make('perfil_id')
-                    ->options(PerfilModel::where('perfil_cliente', 1)->pluck('nome','id'))
+                    ->options(PerfilModel::where('perfil_cliente', PerfilModel::PerfilCliente())->pluck('nome','id'))
                     ->required()
                     ->label('Perfil')                     
 

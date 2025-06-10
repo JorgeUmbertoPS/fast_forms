@@ -7,6 +7,7 @@ use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\PerfilModel;
+use App\Models\PermissaoModel;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Section;
 use Illuminate\Database\Eloquent\Builder;
@@ -24,23 +25,28 @@ class PerfilModelResource extends Resource
     protected static ?string $navigationGroup = 'Administração';
     protected static ?string $navigationIcon = 'heroicon-o-wrench-screwdriver';
 
-    
+    public static function shouldRegisterNavigation(): bool
+    {
+        return PermissaoModel::hasPermission('manipular-configurar_questionarios');
+    }
+
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 //
                 Section::make('Dados do Perfil')
-                ->schema([
-                    Forms\Components\TextInput::make('nome')
-                        ->required()
-                        ->maxLength(255)
-                        ->columnSpan(1)
-                        ->label('Nome do Perfil'),
-                    Forms\Components\TextInput::make('descricao')
-                        ->maxLength(255)
-                        ->columnSpan(2)
-                        ->label('Descrição do Perfil'),
+                    ->schema([
+                        Forms\Components\TextInput::make('nome')
+                            ->required()
+                            ->maxLength(255)
+                            ->columnSpan(1)
+                            ->label('Nome do Perfil'),
+                        Forms\Components\TextInput::make('descricao')
+                            ->maxLength(255)
+                            ->columnSpan(2)
+                            ->label('Descrição do Perfil'),
                     ])->columns(3),
             ]);
     }
@@ -94,10 +100,9 @@ class PerfilModelResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-                ->where('perfil_cliente', 1);
-      
+            ->where('perfil_cliente', 1);
     }
-    
+
 
     public static function getPages(): array
     {
