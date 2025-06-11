@@ -12,57 +12,56 @@ class Permissoes extends Seeder
     /**
      * Run the database seeds.
      */
+
+
     public function run(): void
     {
-        //
-        $models = [
-            'clientes', 'usuarios', 'modelos', 'formularios', 'configurar_questionarios', 'responder_questionarios'
-        ];
-        foreach ($models as $model) {
-            PermissaoModel::create([
-                'nome' => ucfirst($model),
-                'descricao' => 'Permissão para o módulo ' . ucfirst($model),
-                'slug' => 'manipular-' . $model,
-            ]);
-        }
 
         // incluir permissoes para o perfil de cliente perfil_permissao 
         PerfilPermissaoModel::insert([
             'perfil_id' => 3, // ID do perfil de cliente
-            'permissao_id' => PermissaoModel::where('slug', 'manipular-clientes')->first()->id,
+            'permissao_id' => PermissaoModel::where('slug', PermissaoModel::PERMISSAO_CLIENTE)->first()->id,
+            'empresa_id' => 2, // ID da empresa, se necessário
         ]);
         PerfilPermissaoModel::insert([
             'perfil_id' => 3, // ID do perfil de cliente
-            'permissao_id' => PermissaoModel::where('slug', 'manipular-usuarios')->first()->id,
+            'permissao_id' => PermissaoModel::where('slug', PermissaoModel::PERMISSAO_USUARIO)->first()->id,
+            'empresa_id' => 2
         ]);
         PerfilPermissaoModel::insert([
             'perfil_id' => 3, // ID do perfil de cliente
-            'permissao_id' => PermissaoModel::where('slug', 'manipular-formularios')->first()->id,
-        ]);
-
-        PerfilPermissaoModel::insert([
-            'perfil_id' => 3, // ID do perfil de cliente
-            'permissao_id' => PermissaoModel::where('slug', 'configurar_questionarios')->first()->id,
+            'permissao_id' => PermissaoModel::where('slug', PermissaoModel::PERMISSAO_MANIPULAR_FORMULARIOS)->first()->id,
+            'empresa_id' => 2
         ]);
 
         PerfilPermissaoModel::insert([
             'perfil_id' => 3, // ID do perfil de cliente
-            'permissao_id' => PermissaoModel::where('slug', 'responder_questionarios')->first()->id,
+            'permissao_id' => PermissaoModel::where('slug', PermissaoModel::PERMISSAO_CONFIGURAR_QUESTIONARIO)->first()->id,
+            'empresa_id' => 2
         ]);
 
         PerfilPermissaoModel::insert([
             'perfil_id' => 3, // ID do perfil de cliente
-            'permissao_id' => PermissaoModel::where('slug', 'manipular-modelos')->first()->id,
+            'permissao_id' => PermissaoModel::where('slug', PermissaoModel::PERMISSAO_RESPONDER_QUESTIONARIO)->first()->id,
+            'empresa_id' => 2
+        ]);
+
+        PerfilPermissaoModel::insert([
+            'perfil_id' => 3, // ID do perfil de cliente
+            'permissao_id' => PermissaoModel::where('slug', PermissaoModel::PERMISSAO_MANIPULAR_MODELOS)->first()->id,
+            'empresa_id' => 2
         ]);
 
         PerfilPermissaoModel::insert([
             'perfil_id' => 4, // ID do perfil de cliente
-            'permissao_id' => PermissaoModel::where('slug', 'configurar_questionarios')->first()->id,
+            'permissao_id' => PermissaoModel::where('slug', PermissaoModel::PERMISSAO_CONFIGURAR_QUESTIONARIO)->first()->id,
+            'empresa_id' => 2
         ]);
 
         PerfilPermissaoModel::insert([
             'perfil_id' => 4, // ID do perfil de cliente
-            'permissao_id' => PermissaoModel::where('slug', 'responder_questionarios')->first()->id,
+            'permissao_id' => PermissaoModel::where('slug', PermissaoModel::PERMISSAO_RESPONDER_QUESTIONARIO)->first()->id,
+            'empresa_id' => 2
         ]);
     }
 }

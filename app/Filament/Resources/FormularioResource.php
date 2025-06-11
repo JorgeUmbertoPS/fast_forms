@@ -48,7 +48,7 @@ class FormularioResource extends Resource
 
     public static function shouldRegisterNavigation(): bool
     {
-        return PermissaoModel::hasPermission('manipular-formularios');
+        return PermissaoModel::hasPermission(PermissaoModel::PERMISSAO_MANIPULAR_FORMULARIOS);
     }    
 
     public static function form(Form $form): Form

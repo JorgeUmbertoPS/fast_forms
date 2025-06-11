@@ -30,7 +30,7 @@ class QuestionarioResource extends Resource
 
     public static function shouldRegisterNavigation(): bool
     {
-        return PermissaoModel::hasPermission('manipular-responder_questionarios');
+        return PermissaoModel::hasPermission(PermissaoModel::PERMISSAO_RESPONDER_QUESTIONARIO);
     }  
 
     use TraitSomenteUsuario;

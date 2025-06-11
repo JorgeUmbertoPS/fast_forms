@@ -27,7 +27,7 @@ class PermissaoModelResource extends Resource
 
     public static function shouldRegisterNavigation(): bool
     {
-        return PermissaoModel::hasPermission('manipular-permissoes');
+        return PermissaoModel::hasPermission(PermissaoModel::PERMISSAO_MANIPULAR_PERMISSOES);
     }  
 
     public static function form(Form $form): Form

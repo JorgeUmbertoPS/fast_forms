@@ -103,13 +103,20 @@ class DatabaseSeeder extends Seeder
         ModeloRespostaTipo::insert(['nome' => 'Valor',            'componente' => 'TextBox']);
         
         $models = [
-            'cliente', 'usuario', 'modelos', 'formularios', 'configurar_questionarios', 'responder_questionarios'
+            PermissaoModel::PERMISSAO_CLIENTE,
+            PermissaoModel::PERMISSAO_USUARIO,
+            PermissaoModel::PERMISSAO_CONFIGURAR_QUESTIONARIO,
+            PermissaoModel::PERMISSAO_RESPONDER_QUESTIONARIO,
+            PermissaoModel::PERMISSAO_MANIPULAR_FORMULARIOS,
+            PermissaoModel::PERMISSAO_MANIPULAR_MODELOS,
+            PermissaoModel::PERMISSAO_MANIPULAR_CONFIGURACOES
         ];
+
         foreach ($models as $model) {
             PermissaoModel::create([
                 'nome' => ucfirst($model),
                 'descricao' => 'Permissão para o módulo ' . ucfirst($model),
-                'slug' => 'manipular-' . $model,
+                'slug' => $model,
             ]);
         }
 
@@ -126,6 +133,9 @@ class DatabaseSeeder extends Seeder
             'updated_at' => Date("Y-m-d H:i:s"),
         ]);  
         
+        Segmento::insert([
+            ['nome' => 'CHECKLIST CAMINHÃO']
+        ]);
 
     }
 }

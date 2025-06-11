@@ -101,7 +101,7 @@ class StatsOverview extends BaseWidget
 
     public static function canView(): bool
     {
-        return !User::SuperAdmin();
+        return User::AdminEmpresa();
 
     }
 

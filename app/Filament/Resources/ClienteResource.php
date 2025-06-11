@@ -38,7 +38,7 @@ class ClienteResource extends Resource
 
     public static function shouldRegisterNavigation(): bool
     {
-        return PermissaoModel::hasPermission('manipular-clientes');
+        return PermissaoModel::hasPermission(PermissaoModel::PERMISSAO_CLIENTE);
     }    
 
     public static function form(Form $form): Form

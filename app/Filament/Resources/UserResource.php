@@ -7,17 +7,19 @@ use App\Models\User;
 use Filament\Tables;
 use App\Models\Perfil;
 use App\Models\Empresa;
+use Nette\Utils\Random;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Models\PerfilModel;
 use App\Traits\TraitOnlyTeam;
 use App\Models\PermissaoModel;
 use Filament\Resources\Resource;
 use Illuminate\Support\Facades\DB;
 use Filament\Tables\Filters\Filter;
 use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Support\Facades\Hash;
 use Filament\Forms\Components\Hidden;
-
 use Filament\Forms\Components\Select;
 use Spatie\Permission\Contracts\Role;
 use Filament\Forms\Components\Section;
@@ -30,7 +32,6 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Resources\RelationManagers\RelationGroup;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Filament\Resources\UserResource\RelationManagers\UsersEmpresasRelationManager;
-use App\Models\PerfilModel;
 
 class UserResource extends Resource
 {
@@ -48,7 +49,7 @@ class UserResource extends Resource
 
     public static function shouldRegisterNavigation(): bool
     {
-        return PermissaoModel::hasPermission('manipular-usuarios');
+        return PermissaoModel::hasPermission(PermissaoModel::PERMISSAO_USUARIO);
     }  
 
     public static function form(Form $form): Form
@@ -141,7 +142,7 @@ class UserResource extends Resource
                             ->title('Reset de Senha')	
                             ->iconColor('danger')
                             ->color('danger') 
-                            ->body('Erro ao enviar email para '.$user->email)
+                            ->body('Erro ao enviar email para '.$user->email. ' - '.$th->getMessage())
                             ->send();
                         }
                     }

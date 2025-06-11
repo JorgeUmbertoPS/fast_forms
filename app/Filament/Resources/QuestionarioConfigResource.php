@@ -33,7 +33,7 @@ class QuestionarioConfigResource extends Resource
 
     public static function shouldRegisterNavigation(): bool
     {
-        return PermissaoModel::hasPermission('manipular-configurar_questionarios');
+        return PermissaoModel::hasPermission(PermissaoModel::PERMISSAO_CONFIGURAR_QUESTIONARIO);
     }   
 
     public static function form(Form $form): Form

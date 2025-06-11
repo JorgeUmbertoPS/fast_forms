@@ -27,7 +27,7 @@ class PerfilModelResource extends Resource
 
     public static function shouldRegisterNavigation(): bool
     {
-        return PermissaoModel::hasPermission('manipular-configurar_questionarios');
+        return PermissaoModel::hasPermission(PermissaoModel::PERMISSAO_MANIPULAR_PERFIS);
     }
 
 
