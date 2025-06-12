@@ -20,3 +20,4 @@ Route::get('/', function () {
 });
 
 Route::get('questionario-report/{record}', [App\Http\Controllers\Questionario::class, 'report'])->name('questionario.report');
+Route::get('contrato-report/{record}', [App\Http\Controllers\Contrato::class, 'report'])->name('contrato.report');

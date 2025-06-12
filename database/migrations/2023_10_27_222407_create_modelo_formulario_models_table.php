@@ -23,17 +23,11 @@ return new class extends Migration
             $table->integer('status')->default(1);
             $table->string('cnpj', 18)->nullable();
             $table->string('razao_social', 100)->nullable();
-            $table->string('ie', 15)->nullable();
-            $table->string('im', 15)->nullable();
+            $table->string('endereco')->nullable();
             $table->string('email', 100)->nullable();
-            $table->string('cnae', 7)->nullable();
-            $table->integer('qtd_licencas')->default(0)->nullable();
             $table->string('telefone', 15)->nullable();
-            $table->unsignedBigInteger('plano_id')->nullable();
-            $table->foreign('plano_id')->references('id')->on('empresas_planos');
-            $table->date('start_date')->nullable();
-            $table->date('end_date')->nullable();
             $table->string('logo')->nullable();
+            
             //segmento
             $table->unsignedInteger('segmento_id')->nullable();
             $table->timestamps();

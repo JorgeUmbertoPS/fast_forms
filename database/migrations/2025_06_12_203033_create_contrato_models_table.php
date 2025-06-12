@@ -13,18 +13,18 @@ return new class extends Migration
     {
         Schema::create('contratos_saas', function (Blueprint $table) {
             $table->id();
-            $table->string('contratante_nome');
-            $table->string('contratante_cnpj');
-            $table->string('contratante_endereco')->nullable();
-            $table->string('software_nome');
+
+            $table->foreignId('contratante_id')->constrained('empresas')->onDelete('cascade');
+            $table->string('software_nome')->default('Fast Forms');
             $table->decimal('valor_mensal', 10, 2);
             $table->date('data_inicio');
-            $table->string('cidade');
-            $table->string('uf');
-            $table->string('representante_contratada');
-            $table->string('cnpj_contratada');
-            $table->string('nome_contratada');
             $table->text('observacoes')->nullable();
+            $table->integer('qtd_licencas')->default(0)->nullable();
+            $table->unsignedBigInteger('plano_id')->nullable();
+            $table->foreign('plano_id')->references('id')->on('empresas_planos');
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();            
+            //
             $table->timestamps();
         });
     }

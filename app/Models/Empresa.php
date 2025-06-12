@@ -15,21 +15,24 @@ class Empresa extends Model
     protected $fillable = [
         "nome",
         "status",
-        "plano_id",
         "cnpj",
-        "ie",
         "razao_social",
         "email",
-        "cnae",
-        "qtd_licencas",
         "telefone",
-        "start_date",
-        "end_date",
         "logo",
-        "im",
-        "segmento_id"
+        "segmento_id",
+        "endereco",
 
     ];
+
+    protected $casts = [
+        'status' => 'boolean',
+    ];
+
+    public function segmento()
+    {
+        return $this->belongsTo(Segmento::class, 'segmento_id');
+    }
 
     public function users()
     {

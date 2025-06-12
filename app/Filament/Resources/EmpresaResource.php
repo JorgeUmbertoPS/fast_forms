@@ -59,17 +59,10 @@ class EmpresaResource extends Resource
                         ->label('CNPJ')
                         ->maxLength(18),   
 
-                    Forms\Components\TextInput::make('ie')
-                        ->label('IE')
+                    Forms\Components\TextInput::make('endereco')
+                        ->label('Endereço')
+                        ->columnSpan(3)
                         ->maxLength(15),
-
-                    Forms\Components\TextInput::make('im')
-                        ->label('IM')
-                        ->maxLength(15),
-
-                    Forms\Components\TextInput::make('cnae')
-                        ->label('CNAE')
-                        ->maxLength(7),
 
                     Forms\Components\TextInput::make('email')
                         ->label('Email')
@@ -90,36 +83,6 @@ class EmpresaResource extends Resource
                         ->label('Segmento')
                         ->columnSpan(1),
 
-                    Section::make()
-                    ->label('Licenças')
-                    ->schema([
-                            Forms\Components\TextInput::make('qtd_licencas')
-                            ->required()
-                            ->label('Quantidade de Licenças')
-                            ->numeric(),
-                            Forms\Components\Select::make('status')
-                                ->options([
-                                    1 => 'Ativo',
-                                    0 => 'Inativo',
-                                ])
-                                ->label('Status')
-                                ->required(),
-                            Forms\Components\Select::make('plano_id')
-                                    ->options(
-                                        EmpresaPlano::all()->pluck('name', 'id')
-                                    )
-                                ->label('Plano')
-                                ->columnSpan(2),
-                            Grid::make()
-                                ->schema([
-                                    Forms\Components\DatePicker::make('start_date')
-                                    ->required(),
-                                Forms\Components\DatePicker::make('end_date')
-                                    ->required(),
-                                ])->columns(2),
-  
-                        ])->columns(4)
-
                     ])->columns(4),
 
 
@@ -137,8 +100,6 @@ class EmpresaResource extends Resource
                     ->label('Logo')
                     ->size(50),                    
                 Tables\Columns\TextColumn::make('email'),
-                Tables\Columns\TextColumn::make('plano.name')
-                    ->label('Plano'),
                 Tables\Columns\IconColumn::make('status'),
 
             ])
