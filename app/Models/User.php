@@ -5,18 +5,22 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Filament\Panel;
 use App\Models\Perfil;
-use Laravel\Sanctum\HasApiTokens;
+use Nette\Utils\Random;
 
 use App\Observers\UserObserver;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Filament\Notifications\Notification;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Models\Contracts\FilamentUser;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Attributes\ObservedBy;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[ObservedBy([UserObserver::class])]
 class User extends Authenticatable implements FilamentUser
@@ -94,6 +98,37 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasOne(Empresa::class, 'id', 'empresa_id');
     }
 
+
+    public static function SendMail($record){
+        try {
+            
+            DB::beginTransaction();
+            $user = User::find($record->id);
+            $user->password = Hash::make(Random::generate(8));
+
+            $token = app('auth.password.broker')->createToken($user);
+            $notification = new \Filament\Notifications\Auth\ResetPassword($token);
+            $notification->url = \Filament\Facades\Filament::getResetPasswordUrl($token, $user);
+            $user->notify($notification);
+
+            Notification::make()
+                    ->title('Reset de Senha')	
+                    ->iconColor('success')
+                    ->color('success') 
+                    ->body('Email enviado com sucesso para '.$user->email)
+                    ->send();
+            DB::commit();
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Notification::make()
+            ->title('Reset de Senha')	
+            ->iconColor('danger')
+            ->color('danger') 
+            ->body('Erro ao enviar email para '.$user->email. ' - '.$th->getMessage())
+            ->send();
+        }
+    }
 
 
 

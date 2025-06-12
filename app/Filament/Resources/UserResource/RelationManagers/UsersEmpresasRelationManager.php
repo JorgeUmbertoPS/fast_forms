@@ -22,7 +22,6 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Components\FormComponentes;
 use App\Models\PerfilModel;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Notifications\Auth\CustomResetPassword;
 use Filament\Resources\RelationManagers\RelationManager;
 
 class UsersEmpresasRelationManager extends RelationManager
@@ -68,19 +67,8 @@ class UsersEmpresasRelationManager extends RelationManager
                 Tables\Actions\CreateAction::make()
                 ->after(
                     function ($record) {
-                        $token = app('auth.password.broker')->createToken($record);
-                        $url = \Filament\Facades\Filament::getResetPasswordUrl($token, $record);
+                        User::SendMail($record);
 
-                        $notification = new \App\Notifications\CustomResetPassword($token, $url);
-                        
-                        $record->notify($notification);
-
-                        Notification::make()
-                        ->title('Usuário criado com sucesso')	
-                        ->iconColor('success')
-                        ->color('success') 
-                        ->body('Usuário Cadastrado e E-mail enviado')
-                        ->send();
                     }
                 )
                 ->label('Novo')
@@ -106,8 +94,10 @@ class UsersEmpresasRelationManager extends RelationManager
     {
         
         parent::configureCreateAction($action);
+
         $action->mutateFormDataUsing(function ($data) {
             $model = $this->getOwnerRecord();
+   
             $data['empresa_id'] = $model->id;
             $data['password'] = bcrypt($data['password']);  
             $data['admin_cliente'] = 1;
@@ -115,15 +105,17 @@ class UsersEmpresasRelationManager extends RelationManager
             return $data;
         });
         
-        /*
+        
         $action->using(function (array $data): User {
 
             $user = DB::table('users')->insert($data);
             $user = User::where('email', $data['email'])->first();
-            $user->assignRole('Cliente Admin'); // Substitua pelo nome da role desejada
+            $user->admin_cliente = 1;
+            $user->perfil_id = PerfilModel::PERFIL_CLIENTE_ADMIN; // Define o perfil como Admin Cliente
+            $user->save();
     
             return $user;
-        });*/
+        });
         
 
     }

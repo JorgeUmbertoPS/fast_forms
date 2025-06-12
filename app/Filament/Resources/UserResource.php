@@ -118,33 +118,7 @@ class UserResource extends Resource
                 ->label('Reenviar Senha')
                 ->action(
                     function ($record) {
-                        try {
-                            DB::beginTransaction();
-                            $user = User::find($record->id);
-                            $user->password = Hash::make(Random::generate(8));
-
-                            $token = app('auth.password.broker')->createToken($user);
-                            $notification = new \Filament\Notifications\Auth\ResetPassword($token);
-                            $notification->url = \Filament\Facades\Filament::getResetPasswordUrl($token, $user);
-                            $user->notify($notification);
-
-                            Notification::make()
-                                    ->title('Reset de Senha')	
-                                    ->iconColor('success')
-                                    ->color('success') 
-                                    ->body('Email enviado com sucesso para '.$user->email)
-                                    ->send();
-                            DB::commit();
-
-                        } catch (\Throwable $th) {
-                            DB::rollBack();
-                            Notification::make()
-                            ->title('Reset de Senha')	
-                            ->iconColor('danger')
-                            ->color('danger') 
-                            ->body('Erro ao enviar email para '.$user->email. ' - '.$th->getMessage())
-                            ->send();
-                        }
+                        User::SendMail($record);
                     }
                 )
                 ->visible(
