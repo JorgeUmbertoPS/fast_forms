@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->unsignedInteger('empresa_id')->nullable();
-            $table->integer('ativo')->default(1);
+            $table->integer('ativo')->default(0);
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

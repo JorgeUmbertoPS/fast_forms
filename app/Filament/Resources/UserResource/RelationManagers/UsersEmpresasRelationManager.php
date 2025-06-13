@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\UserResource\RelationManagers;
 
+use Stringable;
 use Filament\Forms;
 use App\Models\Role;
 use App\Models\User;
@@ -9,7 +10,9 @@ use Filament\Tables;
 use App\Models\Empresa;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Models\PerfilModel;
 use App\Models\UserEmpresa;
+use Illuminate\Support\Str;
 use App\Models\Pba\EmpresaTipo;
 use App\Models\Pba\EmpresaUsuario;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +23,6 @@ use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Components\FormComponentes;
-use App\Models\PerfilModel;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Resources\RelationManagers\RelationManager;
 
@@ -99,7 +101,8 @@ class UsersEmpresasRelationManager extends RelationManager
             $model = $this->getOwnerRecord();
    
             $data['empresa_id'] = $model->id;
-            $data['password'] = bcrypt($data['password']);  
+            $data['password'] = bcrypt(Str::random(8)); // Gera uma senha aleatória de 8 caracteres
+            $data['ativo'] = 0; // Define o usuário como ativo
             $data['admin_cliente'] = 1;
             $data['perfil_id'] = PerfilModel::PERFIL_CLIENTE_ADMIN; // Define o perfil como Admin Cliente
             return $data;

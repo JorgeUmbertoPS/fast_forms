@@ -23,7 +23,10 @@ return new class extends Migration
             $table->unsignedBigInteger('plano_id')->nullable();
             $table->foreign('plano_id')->references('id')->on('empresas_planos');
             $table->date('start_date')->nullable();
-            $table->date('end_date')->nullable();            
+            $table->date('end_date')->nullable();    
+            //empresa_id
+            $table->unsignedBigInteger('empresa_id')->default(0);
+            $table->foreign('empresa_id')->references('id')->on('empresas');        
             //
             $table->timestamps();
         });

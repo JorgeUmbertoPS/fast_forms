@@ -11,6 +11,7 @@ class ModeloFormulariosSeeder extends Seeder
     public function run(): void
     {
 
+        
         Empresa::insert([
             'nome' => "HC",
             'status' => 1,
@@ -30,23 +31,23 @@ class ModeloFormulariosSeeder extends Seeder
         ]);
 
         DB::statement("
-        INSERT INTO modelo_perguntas_blocos (titulo,sub_titulo,descricao,icon,instrucoes,observacoes,modelo_id,ordem,empresa_id,created_at,updated_at) 
-         VALUES
-            ('CABEÇALHO',NULL,'CABEÇALHO','book-open',NULL,NULL,1,1,1,'2025-06-11 19:07:30','2025-06-11 19:07:30'),
-            ('INSPEÇÃO DE VEÍCULOS',NULL,'INSPEÇÃO DE VEÍCULOS','clipboard-document-check','INSTRUÇÕES PARA A INSPEÇÃO DE VEÍCULOS ATENÇÃO PARA VERIFICAR TODOS OS ITENS DA LISTA. INCLUA DETALHES E MAIS INFORMAÇÕES NO CAMPO DE OBSERVAÇÕES AO FINAL DO CHECKLIST.',NULL,1,2,1,'2025-06-11 19:17:28','2025-06-11 19:17:28'),
-            ('LUZES',NULL,'LUZES','clipboard-document-check',NULL,NULL,1,3,1,'2025-06-11 19:18:40','2025-06-11 19:18:40'),
-            ('MOTOR',NULL,'MOTOR','clipboard-document-check',NULL,NULL,1,4,1,'2025-06-11 19:24:46','2025-06-11 19:24:46'),
-            ('SUSPENSÃO',NULL,'SUSPENSÃO','clipboard-document-check',NULL,NULL,1,5,1,'2025-06-11 19:26:49','2025-06-11 19:26:49'),
-            ('FREIOS',NULL,'FREIOS','clipboard-document-check',NULL,NULL,1,6,1,'2025-06-11 19:28:25','2025-06-11 19:28:25'),
-            ('PARTE ELÉTRICA',NULL,'PARTE ELÉTRICA','clipboard-document-check',NULL,NULL,1,7,1,'2025-06-11 19:30:21','2025-06-11 19:30:21'),
-            ('PARTE EXTERNA',NULL,'PARTE EXTERNA','clipboard-document-check',NULL,NULL,1,8,1,'2025-06-11 19:32:38','2025-06-11 19:32:38'),
-            ('PARTE INTERNA',NULL,'PARTE INTERNA','clipboard-document-check',NULL,NULL,1,9,1,'2025-06-11 19:33:50','2025-06-11 19:33:50'),
-            ('ACESSÓRIOS E EQUIPAMENTOS',NULL,'ACESSÓRIOS E EQUIPAMENTOS','clipboard-document-check',NULL,NULL,1,10,1,'2025-06-11 19:36:21','2025-06-11 19:36:21'),
-            ('SEGURANÇA',NULL,'SEGURANÇA','clipboard-document-check',NULL,NULL,1,11,1,'2025-06-11 19:46:18','2025-06-11 19:46:18'),
-            ('PNEUS',NULL,'PNEUS','clipboard-document-check',NULL,NULL,1,12,1,'2025-06-11 19:47:51','2025-06-11 19:47:51'),
-            ('BAÚ',NULL,'BAÚ','clipboard-document-check',NULL,NULL,1,13,1,'2025-06-11 19:48:56','2025-06-11 19:48:56')"
-        );
-
+            INSERT INTO modelo_perguntas_blocos (titulo,sub_titulo,descricao,icon,instrucoes,observacoes,modelo_id,ordem,empresa_id,created_at,updated_at) 
+            VALUES
+                ('CABEÇALHO',NULL,'CABEÇALHO','book-open',NULL,NULL,1,1,1,'2025-06-11 19:07:30','2025-06-11 19:07:30'),
+                ('INSPEÇÃO DE VEÍCULOS',NULL,'INSPEÇÃO DE VEÍCULOS','clipboard-document-check','',NULL,1,2,1,'2025-06-11 19:17:28','2025-06-11 19:17:28'),
+                ('LUZES',NULL,'LUZES','clipboard-document-check',NULL,NULL,1,3,1,'2025-06-11 19:18:40','2025-06-11 19:18:40'),
+                ('MOTOR',NULL,'MOTOR','clipboard-document-check',NULL,NULL,1,4,1,'2025-06-11 19:24:46','2025-06-11 19:24:46'),
+                ('SUSPENSÃO',NULL,'SUSPENSÃO','clipboard-document-check',NULL,NULL,1,5,1,'2025-06-11 19:26:49','2025-06-11 19:26:49'),
+                ('FREIOS',NULL,'FREIOS','clipboard-document-check',NULL,NULL,1,6,1,'2025-06-11 19:28:25','2025-06-11 19:28:25'),
+                ('PARTE ELÉTRICA',NULL,'PARTE ELÉTRICA','clipboard-document-check',NULL,NULL,1,7,1,'2025-06-11 19:30:21','2025-06-11 19:30:21'),
+                ('PARTE EXTERNA',NULL,'PARTE EXTERNA','clipboard-document-check',NULL,NULL,1,8,1,'2025-06-11 19:32:38','2025-06-11 19:32:38'),
+                ('PARTE INTERNA',NULL,'PARTE INTERNA','clipboard-document-check',NULL,NULL,1,9,1,'2025-06-11 19:33:50','2025-06-11 19:33:50'),
+                ('ACESSÓRIOS E EQUIPAMENTOS',NULL,'ACESSÓRIOS E EQUIPAMENTOS','clipboard-document-check',NULL,NULL,1,10,1,'2025-06-11 19:36:21','2025-06-11 19:36:21'),
+                ('SEGURANÇA',NULL,'SEGURANÇA','clipboard-document-check',NULL,NULL,1,11,1,'2025-06-11 19:46:18','2025-06-11 19:46:18'),
+                ('PNEUS',NULL,'PNEUS','clipboard-document-check',NULL,NULL,1,12,1,'2025-06-11 19:47:51','2025-06-11 19:47:51'),
+                ('BAÚ',NULL,'BAÚ','clipboard-document-check',NULL,NULL,1,13,1,'2025-06-11 19:48:56','2025-06-11 19:48:56')
+        ");
+        
         DB::statement("
             INSERT INTO modelo_perguntas (nome,resposta_tipo_id,modelo_id,bloco_id,empresa_id,ordem,obriga_justificativa,obriga_midia,created_at,updated_at,id_mascara) VALUES
                 ('PARA-BRISA',2,NULL,8,1,3,0,0,'2025-06-11 19:32:38','2025-06-11 19:48:55',NULL),
@@ -122,9 +123,11 @@ class ModeloFormulariosSeeder extends Seeder
                 ('FECHADURAS',2,NULL,13,1,2,0,0,'2025-06-11 19:48:56','2025-06-11 19:48:56',NULL),
                 ('CARGA',2,NULL,13,1,3,0,0,'2025-06-11 19:48:56','2025-06-11 19:48:56',NULL),
                 ('SISTEMA DE ELEVAÇÃO',2,NULL,13,1,4,0,0,'2025-06-11 19:48:57','2025-06-11 19:48:57',NULL),
-                ('VENTILAÇÃO',2,NULL,13,1,5,0,0,'2025-06-11 19:48:57','2025-06-11 19:48:57',NULL)");
+                ('VENTILAÇÃO',2,NULL,13,1,5,0,0,'2025-06-11 19:48:57','2025-06-11 19:48:57',NULL)
+            ");
 
-        DB::statement("
+             
+            DB::statement("
                 INSERT INTO public.modelo_respostas (nome,resposta,icon,pergunta_id,empresa_id,ordem,created_at,updated_at) VALUES
                     (NULL,NULL,'no-symbol',1,1,1,'2025-06-11 19:08:39','2025-06-11 19:08:39'),
                     (NULL,NULL,'no-symbol',2,1,1,'2025-06-11 19:09:07','2025-06-11 19:09:07'),
@@ -319,8 +322,9 @@ class ModeloFormulariosSeeder extends Seeder
                     ('N/A',NULL,'no-symbol',73,1,3,'2025-06-11 19:48:56','2025-06-11 19:48:56'),
                     ('OK',NULL,'hand-thumb-up',74,1,1,'2025-06-11 19:48:56','2025-06-11 19:48:56'),
                     ('NOK',NULL,'hand-thumb-down',74,1,2,'2025-06-11 19:48:56','2025-06-11 19:48:56'),
-                    ('N/A',NULL,'no-symbol',74,1,3,'2025-06-11 19:48:56','2025-06-11 19:48:56'),
-                    ");
+                    ('N/A',NULL,'no-symbol',74,1,3,'2025-06-11 19:48:56','2025-06-11 19:48:56')
+                ");
 
-    }
+   
+            }
 }
